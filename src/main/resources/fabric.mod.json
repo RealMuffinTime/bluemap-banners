@@ -3,10 +3,13 @@
   "id": "banners4bm",
   "version": "${version}",
   "name": "Banners4BM",
-  "description": "",
-  "authors": [],
+  "description": "A Minecraft Fabric mod that adds banners to BlueMap.",
+  "authors": ["Nincodedo"],
+  "contributors": ["ekul6547", "RealMuffinTime"],
   "contact": {
-    "repo": "https://github.com/Nincodedo/Banners4BM"
+    "homepage": "https://modrinth.com/mod/banners4bm",
+    "repo": "https://github.com/Nincodedo/Banners4BM",
+    "issues": "https://github.com/Nincodedo/Banners4BM/issues"
   },
   "license": "MIT",
   "icon": "assets/banners4bm/icon.png",
