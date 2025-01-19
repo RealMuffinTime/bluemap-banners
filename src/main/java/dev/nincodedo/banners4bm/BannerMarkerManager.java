@@ -5,6 +5,7 @@ import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.gson.MarkerGson;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -22,7 +23,7 @@ public class BannerMarkerManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("BannerMarkerManager");
 
-    private final String markerJsonFileName = "marker-file.json";
+    private final String markerJsonFileName = FabricLoader.getInstance().getConfigDir().resolve( "banners4bm/maps/overworld.json" ).toString();
     private final String markerSetLabel = "Map Banners";
     private final String bannerMarkerSetId = "overworldmapbanners";
 

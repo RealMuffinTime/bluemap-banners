@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
@@ -15,6 +16,8 @@ import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 public class Banners4BM implements ModInitializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("Banners4BM");
@@ -23,6 +26,11 @@ public class Banners4BM implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        LOGGER.info("Starting Banners4BM");
+
+        String mapsConfigFolder = FabricLoader.getInstance().getConfigDir().resolve( "banners4bm/maps" ).toString();
+        new File(mapsConfigFolder).mkdirs();
+
         bannerMarkerManager = new BannerMarkerManager();
         bannerMapIcons = new BannerMapIcons();
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
@@ -30,7 +38,7 @@ public class Banners4BM implements ModInitializer {
                 return;
             }
             BlueMapAPI.onEnable(blueMapAPI -> {
-                LOGGER.info("Starting Banners4BM");
+                LOGGER.info("Integrating Banners4BM into BlueMap");
                 bannerMarkerManager.loadMarkers(server.getOverworld());
                 bannerMapIcons.loadMapIcons(blueMapAPI);
             });
