@@ -20,9 +20,10 @@ import java.io.File;
 
 public class Banners4BM implements ModInitializer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("Banners4BM");
+    public static final Logger LOGGER = LoggerFactory.getLogger("Banners4BM");
     BannerMarkerManager bannerMarkerManager;
     BannerMapIcons bannerMapIcons;
+    ConfigManager configManager;
 
     @Override
     public void onInitialize() {
@@ -33,6 +34,8 @@ public class Banners4BM implements ModInitializer {
 
         bannerMarkerManager = new BannerMarkerManager();
         bannerMapIcons = new BannerMapIcons();
+        configManager = new ConfigManager();
+
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             if (!server.isRemote()) {
                 return;

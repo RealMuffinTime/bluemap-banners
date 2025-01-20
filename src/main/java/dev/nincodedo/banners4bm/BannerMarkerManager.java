@@ -10,11 +10,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,10 +20,7 @@ import java.io.IOException;
 
 public class BannerMarkerManager {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("BannerMarkerManager");
-
     private final String bannerMarkerSetId = "banners4bm";
-
     private static BannerMarkerManager bannerMarkerManager;
 
     public BannerMarkerManager() {
@@ -47,7 +41,7 @@ public class BannerMarkerManager {
                     try (FileReader reader = new FileReader(fileName)) {
                         world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, MarkerGson.INSTANCE.fromJson(reader, MarkerSet.class)));
                     } catch (IOException ex) {
-                        LOGGER.error(ex.getMessage());
+                        Banners4BM.LOGGER.error(ex.getMessage());
                     }
                 } else {
                     world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, MarkerSet.builder().label("Map Banners").defaultHidden(false).toggleable(true).build()));
@@ -65,7 +59,7 @@ public class BannerMarkerManager {
                     try (FileWriter writer = new FileWriter(fileName)) {
                         MarkerGson.INSTANCE.toJson(markerSet, writer);
                     } catch (IOException ex) {
-                        LOGGER.error(ex.getMessage());
+                        Banners4BM.LOGGER.error(ex.getMessage());
                     }
                 }
             });
