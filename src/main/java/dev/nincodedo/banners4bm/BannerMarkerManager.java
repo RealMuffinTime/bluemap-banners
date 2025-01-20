@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -26,11 +27,21 @@ public class BannerMarkerManager {
 
     private final String bannerMarkerSetId = "banners4bm";
 
+    private static BannerMarkerManager bannerMarkerManager;
+
+    public BannerMarkerManager() {
+        bannerMarkerManager = this;
+    }
+
+    public static BannerMarkerManager getInstance() {
+        return bannerMarkerManager;
+    }
+
     public void loadMarkerSets() {
         BlueMapAPI.getInstance().ifPresent(api -> {
             for (BlueMapWorld world : api.getWorlds()) {
                 // Not the nicest with the names
-                String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("banners4bm/maps/%s.json", world.getId().replace("#minecraft:", "_").replace("_overworld", ""))).toString();
+                String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("banners4bm/maps/%s.json", worldToString(world))).toString();
                 File markerSetsFile = new File(fileName);
                 if (markerSetsFile.exists()) {
                     try (FileReader reader = new FileReader(fileName)) {
@@ -107,5 +118,9 @@ public class BannerMarkerManager {
             string = "_" + string;
         }
         return  world.toString().replace("ServerLevel[", "").replace("]", "") + string;
+    }
+
+    private String worldToString(BlueMapWorld world) {
+        return world.getId().replace("#minecraft:", "_").replace("_overworld", "");
     }
 }

@@ -19,6 +19,9 @@
       "dev.nincodedo.banners4bm.Banners4BM"
     ]
   },
+  "mixins": [
+    "banners4bm.mixins.json"
+  ],
   "depends": {
     "bluemap": ">=${bluemap_version}",
     "fabricloader": ">=${loader_version}",
