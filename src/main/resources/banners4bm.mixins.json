@@ -3,7 +3,8 @@
 	"package": "dev.nincodedo.banners4bm.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"AbstractBlockMixin"
+		"AbstractBlockMixin",
+        "BlockItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

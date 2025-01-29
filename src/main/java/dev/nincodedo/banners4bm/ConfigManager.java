@@ -21,12 +21,18 @@ public class ConfigManager
 {
     private final Hashtable<String, String> config = new Hashtable<>();
     private final String configFilePath;
+    private static ConfigManager configManager;
 
     public ConfigManager()
     {
         this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve( "banners4bm/banners4bm.properties" ).toString();
         this.initialConfigFile();
         this.readConfigFile();
+        configManager = this;
+    }
+
+    public static ConfigManager getInstance() {
+        return configManager;
     }
 
     private void readConfigFile()
@@ -102,10 +108,11 @@ public class ConfigManager
                             # +--------------------------------------------------+
 
                             enabled=true
-                            notify_player_on_place=true
+                            notify_player_on_banner_place=true
                             notify_player_on_marker_add=true
                             notify_player_on_marker_remove=true
                             notify_global_on_marker_remove=false
+                            bluemap_url=https://your-url-to-bluemap.com/
                             """;
 
                 writer.write( string, 0, string.length() );

@@ -7,9 +7,7 @@ import de.bluecolored.bluemap.api.gson.MarkerGson;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -66,41 +64,39 @@ public class BannerMarkerManager {
         });
     }
 
-    public void removeMarker(BannerBlockEntity bannerBlockEntity) {
-        toggleMarker(bannerBlockEntity, null);
+    public boolean doesMarkerExist(BannerBlockEntity bannerBlockEntity) {
+        BlueMapAPI api = BlueMapAPI.getInstance().orElseThrow();
+        BlueMapWorld world = api.getWorld(bannerBlockEntity.getWorld()).orElseThrow();
+        for (BlueMapMap map : world.getMaps()) {
+            MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
+            if (set.get(bannerBlockEntity.getPos().toShortString()) != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void toggleMarker(BannerBlockEntity bannerBlockEntity, BlockState blockState) {
-        BlueMapAPI.getInstance().flatMap(blueMapAPI -> blueMapAPI.getWorld(bannerBlockEntity.getWorld())).ifPresent(blueMapWorld -> {
-            blueMapWorld.getMaps().forEach(blueMapMap -> {
-                var existingBannerMarkerSet = blueMapMap.getMarkerSets().get(bannerMarkerSetId);
-                if (existingBannerMarkerSet == null) {
-                    return;
-                }
-                var markerId = bannerBlockEntity.getPos().toShortString();
-                var existingMarker = existingBannerMarkerSet.getMarkers().get(markerId);
-                if (existingMarker != null) {
-                    existingBannerMarkerSet.remove(markerId);
-                } else if (blockState != null) {
-                    String name;
-                    if (bannerBlockEntity.getCustomName() != null) {
-                        name = bannerBlockEntity.getCustomName().getString();
-                    } else {
-                        var blockTranslationKey = blockState.getBlock().getTranslationKey();
-                        name = Text.translatable(blockTranslationKey).getString();
-                    }
-                    addMarker(bannerBlockEntity, name, existingBannerMarkerSet, blueMapMap);
-                }
-            });
-        });
+    public void removeMarker(BannerBlockEntity bannerBlockEntity) {
+        BlueMapAPI api = BlueMapAPI.getInstance().orElseThrow();
+        BlueMapWorld world = api.getWorld(bannerBlockEntity.getWorld()).orElseThrow();
+        for (BlueMapMap map : world.getMaps()) {
+            MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
+            set.remove(bannerBlockEntity.getPos().toShortString());
+        }
         saveMarkerSet(bannerBlockEntity.getWorld());
     }
 
-    private void addMarker(BannerBlockEntity bannerBlockEntity, String blockName, MarkerSet markerSet, BlueMapMap map) {
-        Vec3d pos = bannerBlockEntity.getPos().toCenterPos();
-        var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getColorForState().name().toLowerCase() + ".png");
-        POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 0, 0).build();
-        markerSet.put(bannerBlockEntity.getPos().toShortString(), bannerMarker);
+    public void addMarker(BannerBlockEntity bannerBlockEntity, String blockName) {
+        BlueMapAPI api = BlueMapAPI.getInstance().orElseThrow();
+        BlueMapWorld world = api.getWorld(bannerBlockEntity.getWorld()).orElseThrow();
+        for (BlueMapMap map : world.getMaps()) {
+            MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
+            Vec3d pos = bannerBlockEntity.getPos().toCenterPos();
+            var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getColorForState().name().toLowerCase() + ".png");
+            POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 0, 0).build();
+            set.put(bannerBlockEntity.getPos().toShortString(), bannerMarker);
+        }
+        saveMarkerSet(bannerBlockEntity.getWorld());
     }
 
     // Pretty sure there is a better way, but I don't know it... Maybe you know?
