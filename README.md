@@ -6,7 +6,7 @@
 ![](src/main/resources/assets/banners4bm/icon.png)
 
 A Minecraft Fabric mod that supports displaying Minecraft banners as markers on BlueMap.  
-For Minecraft version `1.21.1`.
+For Minecraft version `1.21`.
 
 ## Player usage
 
