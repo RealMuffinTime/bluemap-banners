@@ -107,7 +107,6 @@ public class ConfigManager
                             # |   Modify this file to change Banners4BM settings |
                             # +--------------------------------------------------+
 
-                            enabled=true
                             notify_player_on_banner_place=true
                             notify_player_on_marker_add=true
                             notify_player_on_marker_remove=true
