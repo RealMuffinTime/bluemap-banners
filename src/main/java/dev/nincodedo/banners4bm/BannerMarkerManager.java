@@ -11,14 +11,14 @@ import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class BannerMarkerManager {
 
-    private final String bannerMarkerSetId = "banners4bm";
+    private final String bannerMarkerSetId = "Banners4BM";
     private static BannerMarkerManager bannerMarkerManager;
 
     public BannerMarkerManager() {
@@ -34,15 +34,14 @@ public class BannerMarkerManager {
             for (BlueMapWorld world : api.getWorlds()) {
                 // Not the nicest with the names
                 String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("banners4bm/maps/%s.json", worldToString(world))).toString();
-                File markerSetsFile = new File(fileName);
-                if (markerSetsFile.exists()) {
-                    try (FileReader reader = new FileReader(fileName)) {
-                        world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, MarkerGson.INSTANCE.fromJson(reader, MarkerSet.class)));
-                    } catch (IOException ex) {
-                        Banners4BM.LOGGER.error(ex.getMessage());
-                    }
-                } else {
-                    world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, MarkerSet.builder().label("Map Banners").defaultHidden(false).toggleable(true).build()));
+                try (FileReader reader = new FileReader(fileName)) {
+                    MarkerSet markerSet = MarkerGson.INSTANCE.fromJson(reader, MarkerSet.class);
+                    world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
+                } catch (FileNotFoundException ex) {
+                    MarkerSet markerSet = MarkerSet.builder().label(bannerMarkerSetId).defaultHidden(false).toggleable(true).build();
+                    world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
+                } catch (IOException ex) {
+                    Banners4BM.LOGGER.error(ex.getMessage(), ex);
                 }
             }
         });
@@ -57,7 +56,7 @@ public class BannerMarkerManager {
                     try (FileWriter writer = new FileWriter(fileName)) {
                         MarkerGson.INSTANCE.toJson(markerSet, writer);
                     } catch (IOException ex) {
-                        Banners4BM.LOGGER.error(ex.getMessage());
+                        Banners4BM.LOGGER.error(ex.getMessage(), ex);
                     }
                 }
             });
