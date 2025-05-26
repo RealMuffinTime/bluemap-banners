@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "banners4bm",
+  "id": "bluemap-banners",
   "version": "${version}",
-  "name": "Banners4BM",
+  "name": "BlueMap Banners",
   "description": "A Minecraft Fabric mod that adds banners to BlueMap.",
-  "authors": ["Nincodedo"],
-  "contributors": ["ekul6547", "RealMuffinTime"],
+  "authors": ["RealMuffinTime"],
+  "contributors": ["Nincodedo", "ekul6547"],
   "contact": {
-    "homepage": "https://modrinth.com/mod/banners4bm",
-    "repo": "https://github.com/Nincodedo/Banners4BM",
-    "issues": "https://github.com/Nincodedo/Banners4BM/issues"
+    "homepage": "https://modrinth.com/mod/bluemap-banners",
+    "repo": "https://github.com/RealMuffinTime/bluemap-banners",
+    "issues": "https://github.com/RealMuffinTime/bluemap-banners/issues"
   },
   "license": "MIT",
-  "icon": "assets/banners4bm/icon.png",
+  "icon": "assets/bluemap-banners/icon.png",
   "environment": "server",
   "entrypoints": {
     "main": [
-      "dev.nincodedo.banners4bm.Banners4BM"
+      "dev.nincodedo.bluemapbanners.BlueMapBanners"
     ]
   },
   "mixins": [
-    "banners4bm.mixins.json"
+    "bluemap-banners.mixins.json"
   ],
   "depends": {
     "bluemap": ">=${bluemap_version}",

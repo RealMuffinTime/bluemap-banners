@@ -19,7 +19,7 @@ loom {
     splitEnvironmentSourceSets()
 
     mods {
-        "banners4bm" {
+        "bluemap-banners" {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }

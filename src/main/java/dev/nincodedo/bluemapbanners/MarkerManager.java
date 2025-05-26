@@ -1,4 +1,4 @@
-package dev.nincodedo.banners4bm;
+package dev.nincodedo.bluemapbanners;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -16,24 +16,24 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class BannerMarkerManager {
+public class MarkerManager {
 
-    private final String bannerMarkerSetId = "Banners4BM";
-    private static BannerMarkerManager bannerMarkerManager;
+    private final String bannerMarkerSetId = "bluemap-banners";
+    private static MarkerManager markerManager;
 
-    public BannerMarkerManager() {
-        bannerMarkerManager = this;
+    public MarkerManager() {
+        markerManager = this;
     }
 
-    public static BannerMarkerManager getInstance() {
-        return bannerMarkerManager;
+    public static MarkerManager getInstance() {
+        return markerManager;
     }
 
     public void loadMarkerSets() {
         BlueMapAPI.getInstance().ifPresent(api -> {
             for (BlueMapWorld world : api.getWorlds()) {
                 // Not the nicest with the names
-                String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("banners4bm/maps/%s.json", worldToString(world))).toString();
+                String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("bluemap-banners/maps/%s.json", worldToString(world))).toString();
                 try (FileReader reader = new FileReader(fileName)) {
                     MarkerSet markerSet = MarkerGson.INSTANCE.fromJson(reader, MarkerSet.class);
                     world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
@@ -41,14 +41,14 @@ public class BannerMarkerManager {
                     MarkerSet markerSet = MarkerSet.builder().label(bannerMarkerSetId).defaultHidden(false).toggleable(true).build();
                     world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
                 } catch (IOException ex) {
-                    Banners4BM.LOGGER.error(ex.getMessage(), ex);
+                    BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
                 }
             }
         });
     }
 
     public void saveMarkerSet(World mcWorld) {
-        String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("banners4bm/maps/%s.json", worldToString(mcWorld))).toString();
+        String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("bluemap-banners/maps/%s.json", worldToString(mcWorld))).toString();
         BlueMapAPI.getInstance().flatMap(api -> api.getWorld(mcWorld)).ifPresent(world -> {
             BlueMapMap map = world.getMaps().iterator().next();
             map.getMarkerSets().forEach((id, markerSet) -> {
@@ -56,7 +56,7 @@ public class BannerMarkerManager {
                     try (FileWriter writer = new FileWriter(fileName)) {
                         MarkerGson.INSTANCE.toJson(markerSet, writer);
                     } catch (IOException ex) {
-                        Banners4BM.LOGGER.error(ex.getMessage(), ex);
+                        BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
                     }
                 }
             });

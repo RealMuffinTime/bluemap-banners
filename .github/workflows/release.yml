@@ -44,7 +44,7 @@ jobs:
           version-type: release
           game-versions: "${{env.MINECRAFT_VERSION}}"
           loaders: fabric
-          files: "build/libs/Banners4BM-${{env.VERSION}}.jar"
+          files: "build/libs/bluemap-banners-${{env.VERSION}}.jar"
 
           # Config for Modrinth
           modrinth-id: rx2aSILw

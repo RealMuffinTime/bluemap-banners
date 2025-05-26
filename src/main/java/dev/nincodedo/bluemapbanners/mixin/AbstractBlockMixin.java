@@ -1,7 +1,7 @@
-package dev.nincodedo.banners4bm.mixin;
+package dev.nincodedo.bluemapbanners.mixin;
 
-import dev.nincodedo.banners4bm.BannerMarkerManager;
-import dev.nincodedo.banners4bm.ConfigManager;
+import dev.nincodedo.bluemapbanners.MarkerManager;
+import dev.nincodedo.bluemapbanners.ConfigManager;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
@@ -24,13 +24,13 @@ public class AbstractBlockMixin {
     @Inject(at = @At("HEAD"), method = "onStateReplaced")
     private void onBreakInject(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved, CallbackInfo ci) {
         if (state.isIn(BlockTags.BANNERS) && !newState.isIn(BlockTags.BANNERS)) {
-            BannerMarkerManager bannerMarkerManager = BannerMarkerManager.getInstance();
+            MarkerManager markerManager = MarkerManager.getInstance();
             BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
             try {
-                if (bannerBlockEntity != null && bannerMarkerManager.doesMarkerExist(bannerBlockEntity)) {
-                    bannerMarkerManager.removeMarker(bannerBlockEntity);
+                if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
+                    markerManager.removeMarker(bannerBlockEntity);
                     if (ConfigManager.getInstance().getBoolConfig("notify_global_on_marker_remove"))
-                        Objects.requireNonNull(world.getServer()).getPlayerManager().broadcast(Text.literal("[Banner4BM] A marker has been removed from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                        Objects.requireNonNull(world.getServer()).getPlayerManager().broadcast(Text.literal("[BlueMap Banners] A marker has been removed from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
                 }
             } catch (NoSuchElementException ignored) {}
         }

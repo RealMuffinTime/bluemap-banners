@@ -1,7 +1,7 @@
 import os
 import datetime
 
-with open("VERSIONS.md", "r") as inFile:
+with open("CHANGELOG.md", "r") as inFile:
     modrinthFile = open("modrinth-changelog.md", "w")
     githubFile = open("github-changelog.md", "w")
     for line in inFile.readlines():
@@ -22,6 +22,6 @@ with open("gradle.properties", "r") as inFile:
             if line.startswith("minecraft_version="):
                 githubFile.write(f"\nFor Minecraft Version `{line[18:].strip()}`.")
                 envFile.write(f"MINECRAFT_VERSION={line[18:].strip()}\n")
-            elif line.startswith("mod_version = "):
+            elif line.startswith("mod_version="):
                 envFile.write(f"NAME=Version v{line[14:].strip()} - {datetime.date.today()}\n")
                 envFile.write(f"VERSION={line[14:].strip()}\n")

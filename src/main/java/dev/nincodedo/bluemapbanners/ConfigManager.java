@@ -4,7 +4,7 @@
  *  - RealMuffinTime
  */
 
-package dev.nincodedo.banners4bm;
+package dev.nincodedo.bluemapbanners;
 
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -25,7 +25,7 @@ public class ConfigManager
 
     public ConfigManager()
     {
-        this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve( "banners4bm/banners4bm.properties" ).toString();
+        this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve( "bluemap-banners/bluemap-banners.properties" ).toString();
         this.initialConfigFile();
         this.readConfigFile();
         configManager = this;
@@ -53,14 +53,14 @@ public class ConfigManager
                 }
                 catch ( IndexOutOfBoundsException oobe )
                 {
-                    Banners4BM.LOGGER.error( "Invalid config line: {}", line );
+                    BlueMapBanners.LOGGER.error( "Invalid config line: {}", line );
                 }
 
             }
         }
         catch ( IOException ioe )
         {
-            Banners4BM.LOGGER.error( "IOException while reading config file: {}", ioe.getMessage() );
+            BlueMapBanners.LOGGER.error( "IOException while reading config file: {}", ioe.getMessage() );
         }
     }
 
@@ -85,7 +85,7 @@ public class ConfigManager
             fileOut.close();
 
         } catch (IOException ioe) {
-            Banners4BM.LOGGER.error( "IOException while writing config file: {}", ioe.getMessage() );
+            BlueMapBanners.LOGGER.error( "IOException while writing config file: {}", ioe.getMessage() );
         }
     }
 
@@ -94,7 +94,7 @@ public class ConfigManager
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir());
         } catch (IOException e) {
-            Banners4BM.LOGGER.error( "IOException while creating config directory: {}", e.getMessage() );
+            BlueMapBanners.LOGGER.error( "IOException while creating config directory: {}", e.getMessage() );
         }
         // Create standard configuration if file does not exist
         File f = new File(this.configFilePath);
@@ -102,10 +102,10 @@ public class ConfigManager
             try ( BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFilePath ) ) )
             {
                 String string = """ 
-                            # +--------------------------------------------------+
-                            # | Banners4BM main config file                      |
-                            # |   Modify this file to change Banners4BM settings |
-                            # +--------------------------------------------------+
+                            # +-------------------------------------------------------+
+                            # | BlueMap Banners main config file                      |
+                            # |   Modify this file to change BlueMap Banners settings |
+                            # +-------------------------------------------------------+
 
                             notify_player_on_banner_place=true
                             notify_player_on_marker_add=true
@@ -116,7 +116,7 @@ public class ConfigManager
 
                 writer.write( string, 0, string.length() );
             } catch (IOException ioe) {
-                Banners4BM.LOGGER.error( "IOException while writing initial config file: {}", ioe.getMessage() );
+                BlueMapBanners.LOGGER.error( "IOException while writing initial config file: {}", ioe.getMessage() );
             }
         }
     }
