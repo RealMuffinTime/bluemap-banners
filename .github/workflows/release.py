@@ -23,5 +23,5 @@ with open("gradle.properties", "r") as inFile:
                 githubFile.write(f"\nFor Minecraft Version `{line[18:].strip()}`.")
                 envFile.write(f"MINECRAFT_VERSION={line[18:].strip()}\n")
             elif line.startswith("mod_version="):
-                envFile.write(f"NAME=Version v{line[14:].strip()} - {datetime.date.today()}\n")
-                envFile.write(f"VERSION={line[14:].strip()}\n")
+                envFile.write(f"NAME=Version v{line[12:].strip()} - {datetime.date.today()}\n")
+                envFile.write(f"VERSION={line[12:].strip()}\n")
