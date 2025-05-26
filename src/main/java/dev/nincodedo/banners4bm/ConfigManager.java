@@ -111,6 +111,7 @@ public class ConfigManager
                             notify_player_on_marker_add=true
                             notify_player_on_marker_remove=true
                             notify_global_on_marker_remove=false
+                            maxDistance=10000000
                             bluemap_url=https://your-url-to-bluemap.com/
                             """;
 

@@ -81,11 +81,11 @@ public class Banners4BM implements ModInitializer {
                         }
                         bannerMarkerManager.addMarker(bannerBlockEntity, name);
                         if (ConfigManager.getInstance().getBoolConfig("notify_player_on_marker_add"))
-                            player.sendMessage(Text.literal("[Banner4BM] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                            player.sendMessage(Text.literal("[Banner4BM] You added a marker to the web map yippppi"), false);
                     } else {
                         bannerMarkerManager.removeMarker(bannerBlockEntity);
                         if (ConfigManager.getInstance().getBoolConfig("notify_player_on_marker_remove"))
-                            player.sendMessage(Text.literal("[Banner4BM] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                            player.sendMessage(Text.literal("[Banner4BM] You removed a marker from the web map nooooo :'("), false);
                     }
                 } catch (NoSuchElementException ignored) {}
             }
@@ -100,7 +100,7 @@ public class Banners4BM implements ModInitializer {
                 if (bannerBlockEntity != null && bannerMarkerManager.doesMarkerExist(bannerBlockEntity)) {
                     bannerMarkerManager.removeMarker(bannerBlockEntity);
                     if (ConfigManager.getInstance().getBoolConfig("notify_player_on_marker_remove")) {
-                        playerEntity.sendMessage(Text.literal("[Banner4BM] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                        playerEntity.sendMessage(Text.literal("[Banner4BM] You removed a marker from the web map. nooooo :0"), false);
                     }
                 }
             } catch (NoSuchElementException ignored) {}
