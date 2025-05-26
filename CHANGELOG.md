@@ -1,4 +1,23 @@
-## Version [v1.0.2+1.21](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v1.0.2+1.21) - 2024-06-27
+## Version [v2.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.0.0) - 2025-05-26
+### New Stuff
+- Support for multiple dimensions, closes Nincodedo/Banners4BM#2
+- Non player block break is now recognised, closes Nincodedo/Banners4BM#3
+- Added structured config files
+- Added player notifications (configurable in config file)
+  - When a player places a banner (to provide information how to add banners on the map)
+  - When a player adds/removes markers via the map item 
+  - When a player breaks a banner (banner removed)
+  - When a different source breaks a banner (world broadcast)
+  - A link to the bluemap specified in the config file is provided
+### Changes
+- Don't differentiate between filled and non filled map item
+- Use standard config folder
+- Improve README.md
+- Change branding to `BlueMap Banners`
+- Revert back to old versioning
+- Update to Minecraft `1.21.1`
+
+## Version [v1.0.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v1.0.3) - 2024-06-27
 ### Changes
 - Update to Minecraft `1.21` by @ekul6547 in Nincodedo/Banners4BM#5
 ### New Contributors
