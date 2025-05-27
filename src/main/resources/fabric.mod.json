@@ -5,11 +5,12 @@
   "name": "BlueMap Banners",
   "description": "A Minecraft Fabric mod that adds banners to BlueMap.",
   "authors": ["RealMuffinTime"],
-  "contributors": ["Nincodedo", "ekul6547"],
+  "contributors": ["Nincodedo", "ekul6547", "Vito510"],
   "contact": {
     "homepage": "https://modrinth.com/mod/bluemap-banners",
     "repo": "https://github.com/RealMuffinTime/bluemap-banners",
-    "issues": "https://github.com/RealMuffinTime/bluemap-banners/issues"
+    "issues": "https://github.com/RealMuffinTime/bluemap-banners/issues",
+    "discord": "https://discord.gg/Da9haye"
   },
   "license": "MIT",
   "icon": "assets/bluemap-banners/icon.png",
