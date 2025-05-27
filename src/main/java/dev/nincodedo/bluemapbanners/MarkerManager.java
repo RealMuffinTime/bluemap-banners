@@ -92,11 +92,13 @@ public class MarkerManager {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
             Vec3d pos = bannerBlockEntity.getPos().toCenterPos();
             var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getColorForState().name().toLowerCase() + ".png");
-            POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 0, 0).build();
+            var maxDistance = ConfigManager.getInstance().getConfig("maxDistance");
+            POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 12, 32).maxDistance(Double.parseDouble(maxDistance)).build();
             set.put(bannerBlockEntity.getPos().toShortString(), bannerMarker);
         }
         saveMarkerSet(bannerBlockEntity.getWorld());
     }
+
 
     // Pretty sure there is a better way, but I don't know it... Maybe you know?
     private String worldToString(World world) {

@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.URI;
 import java.util.NoSuchElementException;
 
 public class BlueMapBanners implements ModInitializer {
@@ -81,11 +82,11 @@ public class BlueMapBanners implements ModInitializer {
                         }
                         markerManager.addMarker(bannerBlockEntity, name);
                         if (ConfigManager.getInstance().getBoolConfig("notify_player_on_marker_add"))
-                            player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                            player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemap_url")))).withUnderline(true))).append(Text.of(".")), false);
                     } else {
                         markerManager.removeMarker(bannerBlockEntity);
                         if (ConfigManager.getInstance().getBoolConfig("notify_player_on_marker_remove"))
-                            player.sendMessage(Text.literal("[BlueMap Banners] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                            player.sendMessage(Text.literal("[BlueMap Banners] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemap_url")))).withUnderline(true))).append(Text.of(".")), false);
                     }
                 } catch (NoSuchElementException ignored) {}
             }
@@ -100,7 +101,7 @@ public class BlueMapBanners implements ModInitializer {
                 if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
                     if (ConfigManager.getInstance().getBoolConfig("notify_player_on_marker_remove")) {
-                        playerEntity.sendMessage(Text.literal("[BlueMap Banners] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ConfigManager.getInstance().getConfig("bluemap_url"))).withUnderline(true))).append(Text.of(".")), false);
+                        playerEntity.sendMessage(Text.literal("[BlueMap Banners] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemap_url")))).withUnderline(true))).append(Text.of(".")), false);
                     }
                 }
             } catch (NoSuchElementException ignored) {}

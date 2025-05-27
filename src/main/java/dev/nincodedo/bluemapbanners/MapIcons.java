@@ -2,8 +2,6 @@ package dev.nincodedo.bluemapbanners;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import net.minecraft.util.DyeColor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
