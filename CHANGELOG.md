@@ -1,3 +1,12 @@
+## Version [v2.1.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.0) - 2025-05-27
+### Changes
+- Update to Minecraft `1.21.5` by @Vito510 in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
+- Add a marker max view distance config by @Vito510 in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
+- Fix marker icon anchoring by @Vito510 in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
+- Improve handling of config file 
+### New Contributors
+- @Vito510 made their first (forced) contribution in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
+
 ## Version [v2.0.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.0.3) - 2025-05-27
 ### Changes
 - Update to Minecraft `1.21.4`
@@ -12,8 +21,8 @@
 
 ## Version [v2.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.0.0) - 2025-05-26
 ### New Stuff
-- Support for multiple dimensions, closes Nincodedo/Banners4BM#2
-- Non player block break is now recognised, closes Nincodedo/Banners4BM#3
+- Support for multiple dimensions, closes [#2](https://github.com/Nincodedo/Banners4BM/issues/2)
+- Non player block break is now recognised, closes [#3](https://github.com/Nincodedo/Banners4BM/issues/3)
 - Added structured config files
 - Added player notifications (configurable in config file)
   - When a player places a banner (to provide information how to add banners on the map)
@@ -32,9 +41,9 @@
 
 ## Version [v1.0.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v1.0.3) - 2024-06-27
 ### Changes
-- Update to Minecraft `1.21` by @ekul6547 in Nincodedo/Banners4BM#5
+- Update to Minecraft `1.21` by @ekul6547 in [#5](https://github.com/Nincodedo/Banners4BM/pull/5)
 ### New Contributors
-- @ekul6547 made their first contribution in Nincodedo/Banners4BM#5
+- @ekul6547 made their first contribution in [#5](https://github.com/Nincodedo/Banners4BM/pull/5)
 
 ## Version [v1.0.2](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v1.0.2) - 2024-07-17
 ### Changes
