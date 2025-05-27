@@ -1,3 +1,7 @@
+## Version [v2.0.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.0.1) - 2025-05-27
+### Changes
+- Update to Minecraft `1.21.2`
+
 ## Version [v2.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.0.0) - 2025-05-26
 ### New Stuff
 - Support for multiple dimensions, closes Nincodedo/Banners4BM#2
