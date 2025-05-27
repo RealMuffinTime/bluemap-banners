@@ -31,6 +31,7 @@
   - When a different source breaks a banner (world broadcast)
   - A link to the bluemap specified in the config file is provided
 - Add a release workflow
+- Add CHANGELOG.md
 ### Changes
 - Don't differentiate between filled and non filled map item
 - Use standard config folder
