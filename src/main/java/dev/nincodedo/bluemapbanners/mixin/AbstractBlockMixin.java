@@ -30,8 +30,8 @@ public class AbstractBlockMixin {
             try {
                 if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
-                    if (ConfigManager.getInstance().getBoolConfig("notify_global_on_marker_remove"))
-                        Objects.requireNonNull(world.getServer()).getPlayerManager().broadcast(Text.literal("[BlueMap Banners] A marker has been removed from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemap_url")))).withUnderline(true))).append(Text.of(".")), false);
+                    if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove"))
+                        Objects.requireNonNull(world.getServer()).getPlayerManager().broadcast(Text.literal("[BlueMap Banners] A marker has been removed from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
                 }
             } catch (NoSuchElementException ignored) {}
         }

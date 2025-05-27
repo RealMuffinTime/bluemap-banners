@@ -92,8 +92,8 @@ public class MarkerManager {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
             Vec3d pos = bannerBlockEntity.getPos().toCenterPos();
             var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getColorForState().name().toLowerCase() + ".png");
-            var maxDistance = ConfigManager.getInstance().getConfig("maxDistance");
-            POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 12, 32).maxDistance(Double.parseDouble(maxDistance)).build();
+            int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig("markerMaxViewDistance");
+            POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 12, 32).maxDistance(markerMaxViewDistance).build();
             set.put(bannerBlockEntity.getPos().toShortString(), bannerMarker);
         }
         saveMarkerSet(bannerBlockEntity.getWorld());
