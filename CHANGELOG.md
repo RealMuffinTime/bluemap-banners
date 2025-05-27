@@ -9,6 +9,7 @@
   - When a player breaks a banner (banner removed)
   - When a different source breaks a banner (world broadcast)
   - A link to the bluemap specified in the config file is provided
+- Add a release workflow
 ### Changes
 - Don't differentiate between filled and non filled map item
 - Use standard config folder
