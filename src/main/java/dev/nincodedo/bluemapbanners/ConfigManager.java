@@ -42,8 +42,6 @@ public class ConfigManager
         configManager = this;
     }
 
-
-
     public static ConfigManager getInstance() {
         return configManager;
     }
@@ -84,6 +82,8 @@ public class ConfigManager
                 } else if (this.defaultConfig.containsKey(key)) {
                     configsFound.put(key, "");
                     stringBuilder.append(line).append("\n");
+                } else {
+                    stringBuilder.append("#").append(line).append("\n");
                 }
             }
             fileIn.close();

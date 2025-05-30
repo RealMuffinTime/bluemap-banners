@@ -18,15 +18,22 @@ External sources can break banners to remove the marker. (TNT, support block bro
 ## Config file
 ``` properties
 # Wheter players should be notified and introduced how to add markers to BlueMap
-notify_player_on_banner_place=true
+notifyPlayerOnBannerPlace=true
+
 # Wheter players should be notified if they add a marker
-notify_player_on_marker_add=true
+notifyPlayerOnMarkerAdd=true
+
 # Wheter players should be notified if they remove a marker
-notify_player_on_marker_remove=true
+notifyPlayerOnMarkerRemove=true
+
 # Wheter all players on the server should be notified a banner has been removed
-notify_global_on_marker_remove=false
+notifyGlobalOnMarkerRemove=false
+
+# For how far you want to be able to see these banners on BlueMap
+markerMaxViewDistance=10000000
+
 # Your url on which players can click in notifications, to your BlueMap instance 
-bluemap_url=https://your-url-to-bluemap.com/
+bluemapUrl=https://your-url-to-bluemap.com/
 ```
 
 
