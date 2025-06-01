@@ -1,14 +1,18 @@
 import os
-import datetime
+
+version = ""
+modrinthFile = open("modrinth-changelog.md", "w")
+githubFile = open("github-changelog.md", "w")
+envFile = open(os.getenv('GITHUB_ENV'), "a")
 
 with open("CHANGELOG.md", "r") as inFile:
-    modrinthFile = open("modrinth-changelog.md", "w")
-    githubFile = open("github-changelog.md", "w")
     for line in inFile.readlines():
         if line.startswith("\n"):
             break
         elif line.startswith("## "):
-            pass
+            version = line.split("[")[1].split("]")[0]
+            envFile.write(f"\nNAME=Version {version} - {line.split(' ')[-1].strip()}")
+            envFile.write(f"\nVERSION={version.strip('v')}")
         elif line.startswith("### "):
             modrinthFile.write(line)
             githubFile.write(line)
@@ -17,11 +21,7 @@ with open("CHANGELOG.md", "r") as inFile:
             githubFile.write(line)
 
 with open("gradle.properties", "r") as inFile:
-    with open(os.getenv('GITHUB_ENV'), "a") as envFile:
-        for line in inFile.readlines():
-            if line.startswith("minecraft_version="):
-                githubFile.write(f"\nFor Minecraft Version `{line[18:].strip()}`.")
-                envFile.write(f"MINECRAFT_VERSION={line[18:].strip()}\n")
-            elif line.startswith("mod_version="):
-                envFile.write(f"NAME=Version v{line[12:].strip()} - {datetime.date.today()}\n")
-                envFile.write(f"VERSION={line[12:].strip()}\n")
+    for line in inFile.readlines():
+        if line.startswith("minecraft_version="):
+            githubFile.write(f"\nFor Minecraft Version `{line[18:].strip()}`.")
+            envFile.write(f"\nMINECRAFT_VERSION={line[18:].strip()}")
