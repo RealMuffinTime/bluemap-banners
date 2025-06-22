@@ -26,9 +26,10 @@ public class AbstractBlockMixin {
     private void onBreakInject(BlockState state, ServerWorld world, BlockPos pos, boolean moved, CallbackInfo ci) {
         if (state.isIn(BlockTags.BANNERS)) {
             MarkerManager markerManager = MarkerManager.getInstance();
-            BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
+            BannerBlockEntity bannerBlockEntity = new BannerBlockEntity(pos, state);
+            bannerBlockEntity.setWorld(world);
             try {
-                if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
+                if (markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
                     if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove"))
                         Objects.requireNonNull(world.getServer()).getPlayerManager().broadcast(Text.literal("[BlueMap Banners] A marker has been removed from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
