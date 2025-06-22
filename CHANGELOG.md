@@ -1,3 +1,11 @@
+## Version [v2.1.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.1) - 2025-06-22
+### Changes
+- Update to Minecraft `1.21.6`
+- Fix external forces not removing banners (e.g. TNT, support block removed)
+- Update README.md to represent changes in config file
+- Add Vito510 as contributor
+- Releases use date given in CHANGELOG.md instead of run time
+
 ## Version [v2.1.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.0) - 2025-05-27
 ### New Stuff
 - Add a marker max view distance config by @Vito510 in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
