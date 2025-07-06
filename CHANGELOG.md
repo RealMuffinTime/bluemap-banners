@@ -1,3 +1,7 @@
+## Version [v2.1.2](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.2) - 2025-07-06
+### Changes
+- Update to Minecraft `1.21.7`
+
 ## Version [v2.1.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.1) - 2025-06-22
 ### Changes
 - Update to Minecraft `1.21.6`
