@@ -1,3 +1,7 @@
+## Version [v2.1.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.3) - 2025-07-20
+### Changes
+- Update to Minecraft `1.21.8`
+
 ## Version [v2.1.2](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.2) - 2025-07-06
 ### Changes
 - Update to Minecraft `1.21.7`
@@ -5,10 +9,10 @@
 ## Version [v2.1.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.1) - 2025-06-22
 ### Changes
 - Update to Minecraft `1.21.6`
-- Fix external forces not removing banners (e.g. TNT, support block removed)
-- Update README.md to represent changes in config file
-- Add Vito510 as contributor
-- Releases use date given in CHANGELOG.md instead of run time
+- Fix external forces not removing banners (e.g., TNT, support block removed)
+- Update README.md to represent changes in a config file
+- Add Vito510 as a contributor
+- Releases use the date given in CHANGELOG.md instead of run time
 
 ## Version [v2.1.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.0) - 2025-05-27
 ### New Stuff
@@ -16,7 +20,7 @@
 ### Changes
 - Update to Minecraft `1.21.5` by @Vito510 in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
 - Fix marker icon anchoring by @Vito510 in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
-- Improve handling of config file 
+- Improve handling of a config file 
 ### New Contributors
 - @Vito510 made their first (forced) contribution in [#3](https://github.com/RealMuffinTime/bluemap-banners/pull/3)
 
@@ -37,7 +41,7 @@
 - Support for multiple dimensions, closes [#2](https://github.com/Nincodedo/Banners4BM/issues/2)
 - Non player block break is now recognised, closes [#3](https://github.com/Nincodedo/Banners4BM/issues/3)
 - Added structured config files
-- Added player notifications (configurable in config file)
+- Added player notifications (configurable in a config file)
   - When a player places a banner (to provide information how to add banners on the map)
   - When a player adds/removes markers via the map item 
   - When a player breaks a banner (banner removed)
@@ -46,7 +50,7 @@
 - Add a release workflow
 - Add CHANGELOG.md
 ### Changes
-- Don't differentiate between filled and non filled map item
+- Don't differentiate between filled and non-filled map items
 - Use standard config folder
 - Improve README.md
 - Change branding to `BlueMap Banners`
