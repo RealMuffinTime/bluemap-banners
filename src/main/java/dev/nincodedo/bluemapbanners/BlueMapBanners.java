@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URI;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class BlueMapBanners implements ModInitializer {
 
@@ -57,9 +59,7 @@ public class BlueMapBanners implements ModInitializer {
                 bannerMapIcons.loadMapIcons(blueMapAPI);
             });
         });
-        BlueMapAPI.onDisable(blueMapAPI -> {
-            LOGGER.info("Stopping BlueMap Banners");
-        });
+        BlueMapAPI.onDisable(blueMapAPI -> LOGGER.info("Stopping BlueMap Banners"));
         UseBlockCallback.EVENT.register(this::useBlock);
         PlayerBlockBreakEvents.BEFORE.register(this::breakBlock);
     }
@@ -76,14 +76,7 @@ public class BlueMapBanners implements ModInitializer {
             if (blockState != null && blockState.isIn(BlockTags.BANNERS) && bannerBlockEntity != null) {
                 try {
                     if (!markerManager.doesMarkerExist(bannerBlockEntity)) {
-                        String name;
-                        if (bannerBlockEntity.getCustomName() != null) {
-                            name = bannerBlockEntity.getCustomName().getString();
-                        } else {
-                            String blockTranslationKey = blockState.getBlock().getTranslationKey();
-                            name = Text.translatable(blockTranslationKey).getString();
-                        }
-                        markerManager.addMarker(bannerBlockEntity, name);
+                        addMarkerWithName(blockState, bannerBlockEntity, markerManager);
                         if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerAdd"))
                             player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
                     } else {
@@ -95,6 +88,21 @@ public class BlueMapBanners implements ModInitializer {
             }
         }
         return ActionResult.PASS;
+    }
+
+    public static void addMarkerWithName(BlockState blockState, BannerBlockEntity bannerBlockEntity, MarkerManager markerManager) {
+        String name;
+        if (bannerBlockEntity.getCustomName() != null) {
+            name = bannerBlockEntity.getCustomName().getString();
+        } else {
+            if (bannerBlockEntity.getComponents().getTypes().contains(DataComponentTypes.ITEM_NAME))
+                name = Objects.requireNonNull(bannerBlockEntity.getComponents().get(DataComponentTypes.ITEM_NAME)).getString();
+            else {
+                String blockTranslationKey = blockState.getBlock().getTranslationKey();
+                name = Text.translatable(blockTranslationKey).getString();
+            }
+        }
+        markerManager.addMarker(bannerBlockEntity, name);
     }
 
     private boolean breakBlock(World world, PlayerEntity playerEntity, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity) {

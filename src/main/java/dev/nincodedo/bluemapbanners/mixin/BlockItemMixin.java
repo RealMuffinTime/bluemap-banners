@@ -1,5 +1,6 @@
 package dev.nincodedo.bluemapbanners.mixin;
 
+import dev.nincodedo.bluemapbanners.BlueMapBanners;
 import dev.nincodedo.bluemapbanners.ConfigManager;
 import dev.nincodedo.bluemapbanners.MarkerManager;
 import net.minecraft.block.BlockState;
@@ -36,14 +37,7 @@ public class BlockItemMixin {
             if (configManager.getBoolConfig("markerAddInstantOnBannerPlace")) {
                 BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
                 if (bannerBlockEntity != null && !markerManager.doesMarkerExist(bannerBlockEntity)) {
-                    String name;
-                    if (bannerBlockEntity.getCustomName() != null) {
-                        name = bannerBlockEntity.getCustomName().getString();
-                    } else {
-                        String blockTranslationKey = state.getBlock().getTranslationKey();
-                        name = Text.translatable(blockTranslationKey).getString();
-                    }
-                    markerManager.addMarker(bannerBlockEntity, name);
+                    BlueMapBanners.addMarkerWithName(state, bannerBlockEntity, markerManager);
                     if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd") && player != null)
                         player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
                 }
