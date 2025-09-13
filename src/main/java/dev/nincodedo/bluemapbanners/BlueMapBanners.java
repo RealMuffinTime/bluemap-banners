@@ -65,7 +65,9 @@ public class BlueMapBanners implements ModInitializer {
     }
 
     private ActionResult useBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-        if (player.isSpectator() || player.getMainHandStack().isEmpty() && player.getOffHandStack().isEmpty()) {
+        if (player.isSpectator() ||
+                (player.getMainHandStack().isEmpty() && player.getOffHandStack().isEmpty()) ||
+                ConfigManager.getInstance().getBoolConfig("markerAddInstantOnBannerPlace")) {
             return ActionResult.PASS;
         }
         if (player.getMainHandStack().isOf(Items.MAP) || player.getOffHandStack().isOf(Items.MAP) || player.getMainHandStack().isOf(Items.FILLED_MAP) || player.getOffHandStack().isOf(Items.FILLED_MAP)) {

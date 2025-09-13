@@ -28,11 +28,12 @@ public class ConfigManager
     {
         this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve( "bluemap-banners/bluemap-banners.properties" ).toString();
 
-        // Initialize hashtable with default values
+        // Initialize the hashtable with default values
         defaultConfig.put("notifyPlayerOnBannerPlace", "true");
         defaultConfig.put("notifyPlayerOnMarkerAdd", "true");
         defaultConfig.put("notifyPlayerOnMarkerRemove", "true");
         defaultConfig.put("notifyGlobalOnMarkerRemove", "false");
+        defaultConfig.put("markerAddInstantOnBannerPlace", "false");
         defaultConfig.put("markerMaxViewDistance", "10000000");
         defaultConfig.put("bluemapUrl", "https://your-url-to-bluemap.com/");
 
@@ -70,7 +71,7 @@ public class ConfigManager
 
     public void updateConfigFile() {
         try {
-            // read current file and save found configs
+            // read the current file and save found configs
             String line;
             StringBuilder stringBuilder = new StringBuilder();
             BufferedReader fileIn = new BufferedReader(new FileReader(this.configFilePath));
@@ -106,7 +107,7 @@ public class ConfigManager
     }
 
     public void initialConfigFile() {
-        // Create config folder if not exist
+        // Create the config folder if not exist
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir());
         } catch (IOException e) {

@@ -1,7 +1,9 @@
 package dev.nincodedo.bluemapbanners.mixin;
 
 import dev.nincodedo.bluemapbanners.ConfigManager;
+import dev.nincodedo.bluemapbanners.MarkerManager;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -23,8 +25,26 @@ public class BlockItemMixin {
     @Inject(at = @At("HEAD"), method = "postPlacement")
     public void onPlaceInject(BlockPos pos, World world, PlayerEntity player, ItemStack stack, BlockState state, CallbackInfoReturnable<Boolean> cir) {
         if (state.isIn(BlockTags.BANNERS)) {
-            if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnBannerPlace")) {
-                player.sendMessage(Text.literal("[BlueMap Banners] Use a map item on the banner to add a marker on the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
+            MarkerManager markerManager = MarkerManager.getInstance();
+            ConfigManager configManager = ConfigManager.getInstance();
+            if (configManager.getBoolConfig("markerAddInstantOnBannerPlace")) {
+                BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
+                if (bannerBlockEntity != null && !markerManager.doesMarkerExist(bannerBlockEntity)) {
+                    String name;
+                    if (bannerBlockEntity.getCustomName() != null) {
+                        name = bannerBlockEntity.getCustomName().getString();
+                    } else {
+                        String blockTranslationKey = state.getBlock().getTranslationKey();
+                        name = Text.translatable(blockTranslationKey).getString();
+                    }
+                    markerManager.addMarker(bannerBlockEntity, name);
+                    if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd"))
+                        player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
+                }
+            } else {
+                if (configManager.getBoolConfig("notifyPlayerOnBannerPlace")) {
+                    player.sendMessage(Text.literal("[BlueMap Banners] Use a map item on the banner to add a marker on the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
+                }
             }
         }
     }
