@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class MarkerManager {
 
-    private final String bannerMarkerSetId = "bluemap-banners";
+    private final String bannerMarkerSetId = "BlueMap Banners";
     private static MarkerManager markerManager;
 
     public MarkerManager() {

@@ -42,6 +42,7 @@ public class BlueMapBanners implements ModInitializer {
         String mapsConfigFolder = FabricLoader.getInstance().getConfigDir().resolve( "bluemap-banners/maps" ).toString();
         new File(mapsConfigFolder).mkdirs();
 
+        Compatibility.init(mapsConfigFolder);
         markerManager = new MarkerManager();
         bannerMapIcons = new MapIcons();
         configManager = new ConfigManager();
