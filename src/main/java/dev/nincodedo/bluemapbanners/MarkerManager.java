@@ -47,19 +47,17 @@ public class MarkerManager {
         });
     }
 
-    public void saveMarkerSet(World mcWorld) {
-        String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("bluemap-banners/maps/%s.json", worldToString(mcWorld))).toString();
-        BlueMapAPI.getInstance().flatMap(api -> api.getWorld(mcWorld)).ifPresent(world -> {
-            BlueMapMap map = world.getMaps().iterator().next();
-            map.getMarkerSets().forEach((id, markerSet) -> {
-                if (id != null && id.equals(bannerMarkerSetId)) {
-                    try (FileWriter writer = new FileWriter(fileName)) {
-                        MarkerGson.INSTANCE.toJson(markerSet, writer);
-                    } catch (IOException ex) {
-                        BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
-                    }
+    public void saveMarkerSet(BlueMapWorld world) {
+        String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("bluemap-banners/maps/%s.json", worldToString(world))).toString();
+        BlueMapMap map = world.getMaps().iterator().next();
+        map.getMarkerSets().forEach((id, markerSet) -> {
+            if (id != null && id.equals(bannerMarkerSetId)) {
+                try (FileWriter writer = new FileWriter(fileName)) {
+                    MarkerGson.INSTANCE.toJson(markerSet, writer);
+                } catch (IOException ex) {
+                    BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
                 }
-            });
+            }
         });
     }
 
@@ -82,7 +80,7 @@ public class MarkerManager {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
             set.remove(bannerBlockEntity.getPos().toShortString());
         }
-        saveMarkerSet(bannerBlockEntity.getWorld());
+        saveMarkerSet(world);
     }
 
     public void addMarker(BannerBlockEntity bannerBlockEntity, String blockName) {
@@ -96,19 +94,7 @@ public class MarkerManager {
             POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.getX(), pos.getY(), pos.getZ()).icon(iconAddress, 12, 32).maxDistance(markerMaxViewDistance).build();
             set.put(bannerBlockEntity.getPos().toShortString(), bannerMarker);
         }
-        saveMarkerSet(bannerBlockEntity.getWorld());
-    }
-
-
-    // Pretty sure there is a better way, but I don't know it... Maybe you know?
-    private String worldToString(World world) {
-        String string = world.getRegistryKey().toString().replace("ResourceKey[minecraft:dimension / minecraft:", "").replace("]", "");
-        if (string.equals("overworld")) {
-            string = "";
-        } else {
-            string = "_" + string;
-        }
-        return  world.toString().replace("ServerLevel[", "").replace("]", "") + string;
+        saveMarkerSet(world);
     }
 
     private String worldToString(BlueMapWorld world) {
