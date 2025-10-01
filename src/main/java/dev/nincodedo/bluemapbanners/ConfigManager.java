@@ -17,16 +17,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Hashtable;
 
-public class ConfigManager
-{
+public class ConfigManager {
     private final Hashtable<String, String> config = new Hashtable<>();
     private final Hashtable<String, String> defaultConfig = new Hashtable<>();
     private final String configFilePath;
     private static ConfigManager configManager;
 
-    public ConfigManager()
-    {
-        this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve( "bluemap-banners/bluemap-banners.properties" ).toString();
+    public ConfigManager() {
+        this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve("bluemap-banners/bluemap-banners.properties").toString();
 
         // Initialize the hashtable with default values
         defaultConfig.put("notifyPlayerOnBannerPlace", "true");
@@ -39,7 +37,7 @@ public class ConfigManager
 
         this.initialConfigFile();
         this.readConfigFile();
-        this.updateConfigFile();
+        this.updateConfigFile(false);
         configManager = this;
     }
 
@@ -51,25 +49,25 @@ public class ConfigManager
         try (BufferedReader reader = new BufferedReader(new FileReader(this.configFilePath))) {
             // Iterate over each line in the file
             for (String line : reader.lines().toArray(String[]::new)) {
-                if ( line.startsWith( "#" ) || line.isEmpty() ) continue;
+                if (line.startsWith("#") || line.isEmpty()) continue;
 
-                // Split it by the equals sign (.properties format)
-                String[] entry = line.split( "=" );
+                // Split it by the equal sign (.properties format)
+                String[] entry = line.split("=");
                 try {
                     // Try adding the entry into the hashmap
-                    this.config.put( entry[0].trim(), entry[1].trim() );
+                    this.config.put(entry[0].trim(), entry[1].trim());
                 }
                 catch (IndexOutOfBoundsException oobe) {
-                    BlueMapBanners.LOGGER.error( "Invalid config line: {}", line );
+                    BlueMapBanners.LOGGER.error("Invalid config line: {}", line);
                 }
             }
         }
         catch (IOException ioe) {
-            BlueMapBanners.LOGGER.error( "IOException while reading config file: {}", ioe.getMessage() );
+            BlueMapBanners.LOGGER.error("IOException while reading config file: {}", ioe.getMessage());
         }
     }
 
-    public void updateConfigFile() {
+    public void updateConfigFile(boolean force) {
         try {
             // read the current file and save found configs
             String line;
@@ -78,11 +76,15 @@ public class ConfigManager
             Hashtable<String, String> configsFound = new Hashtable<>();
             while ((line = fileIn.readLine()) != null) {
                 String key = line.split("=")[0].trim();
-                if (line.startsWith( "#" ) || line.isEmpty()) {
+                if (line.startsWith("#") || line.isEmpty()) {
                     stringBuilder.append(line).append("\n");
                 } else if (this.defaultConfig.containsKey(key)) {
                     configsFound.put(key, "");
-                    stringBuilder.append(line).append("\n");
+                    if (force) {
+                        stringBuilder.append(key).append("=").append(this.config.get(key)).append("\n");
+                    } else {
+                        stringBuilder.append(line).append("\n");
+                    }
                 } else {
                     stringBuilder.append("#").append(line).append("\n");
                 }
@@ -97,12 +99,12 @@ public class ConfigManager
             }
 
             // write the file with new configs
-            BufferedWriter fileOut = new BufferedWriter(new FileWriter( this.configFilePath ) );
+            BufferedWriter fileOut = new BufferedWriter(new FileWriter(this.configFilePath));
             fileOut.write(stringBuilder.toString());
             fileOut.close();
 
         } catch (IOException ioe) {
-            BlueMapBanners.LOGGER.error( "IOException while writing config file: {}", ioe.getMessage() );
+            BlueMapBanners.LOGGER.error("IOException while writing config file: {}", ioe.getMessage());
         }
     }
 
@@ -111,13 +113,12 @@ public class ConfigManager
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir());
         } catch (IOException e) {
-            BlueMapBanners.LOGGER.error( "IOException while creating config directory: {}", e.getMessage() );
+            BlueMapBanners.LOGGER.error("IOException while creating config directory: {}", e.getMessage());
         }
-        // Create standard configuration if file does not exist
+        // Create standard configuration if the file does not exist
         File file = new File(this.configFilePath);
         if (!file.exists()) {
-            try ( BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFilePath ) ) )
-            {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFilePath))) {
                 StringBuilder string = new StringBuilder("""
                         # +-------------------------------------------------------+
                         # | BlueMap Banners main config file                      |
@@ -130,9 +131,9 @@ public class ConfigManager
                     string.append(key).append("=").append(defaultConfig.get(key)).append("\n");
                 }
 
-                writer.write(string.toString(), 0, string.length() );
+                writer.write(string.toString(), 0, string.length());
             } catch (IOException ioe) {
-                BlueMapBanners.LOGGER.error( "IOException while writing initial config file: {}", ioe.getMessage() );
+                BlueMapBanners.LOGGER.error("IOException while writing initial config file: {}", ioe.getMessage());
             }
         }
     }
@@ -154,5 +155,20 @@ public class ConfigManager
 
     public int getIntConfig(String name) {
         return Integer.parseInt(getConfig(name));
+    }
+
+    public void setConfig(String name, String value) {
+        this.config.put(name, value);
+        updateConfigFile(true);
+    }
+
+    public void setConfig(String name, boolean value) {
+        this.config.put(name, String.valueOf(value));
+        updateConfigFile(true);
+    }
+
+    public void setConfig(String name, int value) {
+        this.config.put(name, String.valueOf(value));
+        updateConfigFile(true);
     }
 }
