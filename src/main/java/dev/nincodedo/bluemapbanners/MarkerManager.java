@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class MarkerManager {
 
-    private final String bannerMarkerSetId = "BlueMap Banners";
+    private final String bannerMarkerSetId = "bluemap-banners";
     private static MarkerManager markerManager;
 
     public MarkerManager() {
@@ -38,7 +38,7 @@ public class MarkerManager {
                     MarkerSet markerSet = MarkerGson.INSTANCE.fromJson(reader, MarkerSet.class);
                     world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
                 } catch (FileNotFoundException ex) {
-                    MarkerSet markerSet = MarkerSet.builder().label(bannerMarkerSetId).defaultHidden(false).toggleable(true).build();
+                    MarkerSet markerSet = MarkerSet.builder().label("BlueMap Banners").defaultHidden(false).toggleable(true).build();
                     world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
                 } catch (IOException ex) {
                     BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
