@@ -21,6 +21,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -91,11 +93,11 @@ public class BlueMapBanners implements ModInitializer {
                     if (!markerManager.doesMarkerExist(bannerBlockEntity)) {
                         addMarkerWithName(blockState, bannerBlockEntity, markerManager);
                         if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerAdd"))
-                            player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
+                            player.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", getWebText()), false);
                     } else {
                         markerManager.removeMarker(bannerBlockEntity);
                         if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove"))
-                            player.sendMessage(Text.literal("[BlueMap Banners] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
+                            player.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", getWebText()), false);
                     }
                 } catch (NoSuchElementException ignored) {}
             }
@@ -118,15 +120,31 @@ public class BlueMapBanners implements ModInitializer {
         markerManager.addMarker(bannerBlockEntity, name);
     }
 
+    public static Text getWebText() {
+        URI uri;
+        String bluemapUrl = ConfigManager.getInstance().getConfig("bluemapUrl");
+        String invalidUrl = "https://invalid-url-in-config.com/";
+        try {
+            // Minecraft only works with an http or https scheme
+            uri = new URI(bluemapUrl);
+            if (!Objects.equals(uri.getScheme(), "http") && !Objects.equals(uri.getScheme(), "https")) {
+                throw new URISyntaxException(bluemapUrl, "Invalid URI Scheme");
+            }
+        } catch (URISyntaxException exception) {
+            LOGGER.error("Could not validate bluemapUrl:", exception);
+            return Text.translatable("bluemapbanners.webMap").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(invalidUrl))).withHoverEvent(new HoverEvent.ShowText(Text.literal(invalidUrl))).withUnderline(true));
+        }
+        return Text.translatable("bluemapbanners.webMap").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(uri)).withHoverEvent(new HoverEvent.ShowText(Text.literal(bluemapUrl))).withUnderline(true));
+    }
+
     private boolean breakBlock(World world, PlayerEntity playerEntity, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity) {
         if (blockState.isIn(BlockTags.BANNERS)) {
             BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(blockPos);
             try {
                 if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
-                    if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove")) {
-                        playerEntity.sendMessage(Text.literal("[BlueMap Banners] You removed a marker from the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
-                    }
+                    if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove"))
+                        playerEntity.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", BlueMapBanners.getWebText()), false);
                 }
             } catch (NoSuchElementException ignored) {}
         }
@@ -356,7 +374,6 @@ public class BlueMapBanners implements ModInitializer {
                 .executes(context -> {
                     context.getSource().sendFeedback(() -> Text.translatable(
                             "bluemapbanners.commands.status",
-                            configManager.getConfig("enabled"),
                             configManager.getConfig("notifyPlayerOnBannerPlace"),
                             configManager.getConfig("notifyPlayerOnMarkerAdd"),
                             configManager.getConfig("notifyPlayerOnMarkerRemove"),

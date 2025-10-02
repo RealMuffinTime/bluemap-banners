@@ -28,5 +28,10 @@
   "bluemapbanners.commands.markerMaxViewDistance.status": "markerMaxViewDistance: %s",
   "bluemapbanners.commands.markerMaxViewDistance.update": "Die maximale Sichtweite für Marker wurde auf %s gesetzt.",
   "bluemapbanners.commands.bluemapUrl.status": "bluemapUrl: %s",
-  "bluemapbanners.commands.bluemapUrl.update": "Die BlueMap-URL wurde auf %s gesetzt."
+  "bluemapbanners.commands.bluemapUrl.update": "Die BlueMap-URL wurde auf %s gesetzt.",
+  "bluemapbanners.notifyPlayerOnMarkerAdd": "Du hast der %s einen Marker hinzugefügt.",
+  "bluemapbanners.notifyPlayerOnMarkerRemove": "Du hast einen Marker von der %s entfernt.",
+  "bluemapbanners.notifyPlayerOnBannerPlace": "Benutze eine Karte auf dem Banner, um einen Marker auf der %s hinzuzufügen.",
+  "bluemapbanners.notifyGlobalOnMarkerRemove": "Ein Marker wurde von der %s entfernt.",
+  "bluemapbanners.webMap": "Webkarte"
 }

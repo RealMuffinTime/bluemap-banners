@@ -9,8 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -39,12 +37,11 @@ public class BlockItemMixin {
                 if (bannerBlockEntity != null && !markerManager.doesMarkerExist(bannerBlockEntity)) {
                     BlueMapBanners.addMarkerWithName(state, bannerBlockEntity, markerManager);
                     if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd") && player != null)
-                        player.sendMessage(Text.literal("[BlueMap Banners] You added a marker to the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
+                        player.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()), false);
                 }
             } else {
-                if (configManager.getBoolConfig("notifyPlayerOnBannerPlace") && player != null) {
-                    player.sendMessage(Text.literal("[BlueMap Banners] Use a map item on the banner to add a marker on the ").append(Text.literal("web map").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create(ConfigManager.getInstance().getConfig("bluemapUrl")))).withUnderline(true))).append(Text.of(".")), false);
-                }
+                if (configManager.getBoolConfig("notifyPlayerOnBannerPlace") && player != null)
+                    player.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnBannerPlace", BlueMapBanners.getWebText()), false);
             }
         }
     }
