@@ -24,6 +24,19 @@ Renamed banners are shown with the customized name on BlueMap as a POI marker.
 * Players can break the banner by hand to remove the marker.  
 * External sources can break banners to remove the marker. (TNT, support block broken)
 
+## Commands
+The main command is `/bluemapbanners`, but there is also the alias `/bb` you can use.
+```
+/bluemapbanners
+/bluemapbanners notifyPlayerOnBannerPlace [true|false]
+/bluemapbanners notifyPlayerOnMarkerAdd [true|false]
+/bluemapbanners notifyPlayerOnMarkerRemove [true|false]
+/bluemapbanners notifyGlobalOnMarkerRemove [true|false]
+/bluemapbanners markerAddInstantOnBannerPlace [true|false]
+/bluemapbanners markerMaxViewDistance [<number>] 
+/bluemapbanners bluemapUrl [<url>]
+```
+
 ## Config file
 ``` properties
 # Wheter players should be notified and introduced how to add markers to BlueMap
