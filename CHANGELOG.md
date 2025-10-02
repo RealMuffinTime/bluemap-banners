@@ -1,3 +1,17 @@
+## Version [v2.2.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.0) - 2025-10-02
+### New Stuff
+- Add commands to configure settings
+- Add translation support for `en_us` and `de_de`
+- Add an option to add markers instantly on banner place [#5](https://github.com/RealMuffinTime/bluemap-banners/issues/5)
+- Rename marker list labels to "BlueMap Banners" and add a compatibility script to migrate old data
+### Changes
+- Update to Minecraft `1.21.9`
+- Update BlueMap dependency
+- Improve README.md and add images
+- Fix global notifier using a wrong config identifier
+- Fix wrong world reference [#9](https://github.com/RealMuffinTime/bluemap-banners/issues/9)
+- Fix GitHub actions artifact not uploading
+
 ## Version [v2.1.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.3) - 2025-07-20
 ### Changes
 - Update to Minecraft `1.21.8`

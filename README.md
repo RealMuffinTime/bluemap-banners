@@ -10,7 +10,7 @@ This is a continuation of [Banners4BM](https://github.com/Nincodedo/Banners4BM) 
 ![BlueMap Banners usage overview](img/overview.jpeg)
 
 ## Player usage
-This mod supports custom named banners. (Just like the vanilla feature of banners on map items.)  
+This mod supports custom-named banners. (Just like the vanilla feature of banners on map items.)  
 Renamed banners are shown with the customized name on BlueMap as a POI marker.
 
 ### When using a map item on an existing banner (enabled by default)
