@@ -412,6 +412,7 @@ public class BlueMapBanners implements ModInitializer {
                             configManager.getConfig("notifyPlayerOnMarkerRemove"),
                             configManager.getConfig("notifyGlobalOnMarkerRemove"),
                             configManager.getConfig("markerAddInstantOnBannerPlace"),
+                            configManager.getConfig("markerAddWithOriginalName"),
                             configManager.getConfig("markerMaxViewDistance"),
                             configManager.getConfig("bluemapUrl")
                     ), false);
