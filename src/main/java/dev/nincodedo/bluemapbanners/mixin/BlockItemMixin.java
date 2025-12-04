@@ -33,9 +33,11 @@ public class BlockItemMixin {
             if (configManager.getBoolConfig("markerAddInstantOnBannerPlace")) {
                 BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
                 if (bannerBlockEntity != null && !markerManager.doesMarkerExist(bannerBlockEntity)) {
-                    BlueMapBanners.addMarkerWithName(state, bannerBlockEntity, markerManager);
-                    if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd") && player != null)
-                        player.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()), false);
+                    if (bannerBlockEntity.getCustomName() != null || configManager.getBoolConfig("markerAddWithOriginalName")) {
+                        BlueMapBanners.addMarkerWithName(state, bannerBlockEntity, markerManager);
+                        if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd") && player != null)
+                            player.sendMessage(Text.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()), false);
+                    }
                 }
             } else {
                 if (configManager.getBoolConfig("notifyPlayerOnBannerPlace") && player != null)
