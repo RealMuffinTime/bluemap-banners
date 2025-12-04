@@ -33,6 +33,7 @@ The main command is `/bluemapbanners`, but there is also the alias `/bb` you can
 /bluemapbanners notifyPlayerOnMarkerRemove [true|false]
 /bluemapbanners notifyGlobalOnMarkerRemove [true|false]
 /bluemapbanners markerAddInstantOnBannerPlace [true|false]
+/bluemapbanners markerAddWithOriginalName [true|false]
 /bluemapbanners markerMaxViewDistance [<number>] 
 /bluemapbanners bluemapUrl [<url>]
 ```
@@ -53,6 +54,9 @@ notifyGlobalOnMarkerRemove=false
 
 # Wheter markers are created instantaneously on banner place
 markerAddInstantOnBannerPlace=false
+
+# Wheter instantly created markers with an original unchanged name are added
+markerAddWithOriginalName=false
 
 # For how far you want to be able to see these banners on BlueMap
 markerMaxViewDistance=10000000

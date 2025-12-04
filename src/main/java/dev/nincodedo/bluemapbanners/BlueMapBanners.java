@@ -163,6 +163,7 @@ public class BlueMapBanners implements ModInitializer {
                                     configManager.getConfig("notifyPlayerOnMarkerRemove"),
                                     configManager.getConfig("notifyGlobalOnMarkerRemove"),
                                     configManager.getConfig("markerAddInstantOnBannerPlace"),
+                                    configManager.getConfig("markerAddWithOriginalName"),
                                     configManager.getConfig("markerMaxViewDistance"),
                                     configManager.getConfig("bluemapUrl")
                             ), false);
@@ -328,6 +329,38 @@ public class BlueMapBanners implements ModInitializer {
                                             return 1;
                                         }))
                         )
+                        
+                        .then(literal("markerAddWithOriginalName").executes(context -> {
+                                            context.getSource().sendFeedback(() -> Text.translatable(
+                                                    "bluemapbanners.commands.markerAddWithOriginalName.status",
+                                                    configManager.getConfig("markerAddWithOriginalName")
+                                            ), false);
+                                            return 1;
+                                        })
+                                        .then(literal("true").executes(context -> {
+                                            if (!configManager.getBoolConfig("markerAddWithOriginalName")) {
+                                                context.getSource().sendFeedback(() -> Text.translatable(
+                                                        "bluemapbanners.commands.markerAddWithOriginalName.true"), false);
+                                                configManager.setConfig("markerAddWithOriginalName", true);
+                                            } else {
+                                                context.getSource().sendFeedback(() -> Text.translatable(
+                                                        "bluemapbanners.commands.markerAddWithOriginalName.already_true"), false);
+                                            }
+                                            return 1;
+                                        }))
+
+                                        .then(literal("false").executes(context -> {
+                                            if (configManager.getBoolConfig("markerAddWithOriginalName")) {
+                                                context.getSource().sendFeedback(() -> Text.translatable(
+                                                        "bluemapbanners.commands.markerAddWithOriginalName.false"), false);
+                                                configManager.setConfig("markerAddWithOriginalName", false);
+                                            } else {
+                                                context.getSource().sendFeedback(() -> Text.translatable(
+                                                        "bluemapbanners.commands.markerAddWithOriginalName.already_false"), false);
+                                            }
+                                            return 1;
+                                        }))
+                        )
 
                         .then(literal("markerMaxViewDistance").executes(context -> {
                                             context.getSource().sendFeedback(() -> Text.translatable(
@@ -379,6 +412,7 @@ public class BlueMapBanners implements ModInitializer {
                             configManager.getConfig("notifyPlayerOnMarkerRemove"),
                             configManager.getConfig("notifyGlobalOnMarkerRemove"),
                             configManager.getConfig("markerAddInstantOnBannerPlace"),
+                            configManager.getConfig("markerAddWithOriginalName"),
                             configManager.getConfig("markerMaxViewDistance"),
                             configManager.getConfig("bluemapUrl")
                     ), false);

@@ -9,7 +9,6 @@ import de.bluecolored.bluemap.api.markers.POIMarker;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

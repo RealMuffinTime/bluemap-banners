@@ -32,6 +32,7 @@ public class ConfigManager {
         defaultConfig.put("notifyPlayerOnMarkerRemove", "true");
         defaultConfig.put("notifyGlobalOnMarkerRemove", "false");
         defaultConfig.put("markerAddInstantOnBannerPlace", "false");
+        defaultConfig.put("markerAddWithOriginalName", "false");
         defaultConfig.put("markerMaxViewDistance", "10000000");
         defaultConfig.put("bluemapUrl", "https://your-url-to-bluemap.com/");
 
