@@ -55,7 +55,7 @@ notifyGlobalOnMarkerRemove=false
 # Wheter markers are created instantaneously on banner place
 markerAddInstantOnBannerPlace=false
 
-# Wheter markers with an original unchanged name should be created
+# Wheter instantly created markers with an original unchanged name are added
 markerAddWithOriginalName=false
 
 # For how far you want to be able to see these banners on BlueMap
