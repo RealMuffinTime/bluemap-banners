@@ -1,3 +1,12 @@
+## Version [v2.2.2](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.2) - 2025-12-18
+### New Stuff
+- Add a config option to disable adding markers of unnamed banners (only applicable to instant placement)
+### Changes
+- Update to Minecraft `1.21.11`
+- Migrate to Mojang mappings
+### New Contributors
+- @CreeperHaed made their first contribution in [#10](https://github.com/RealMuffinTime/bluemap-banners/pull/10)
+
 ## Version [v2.2.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.1) - 2025-10-08
 ### Changes
 - Update to Minecraft `1.21.10`
@@ -95,3 +104,4 @@
 - Initial version
 - Add icons
 - Add GitHub workflow
+

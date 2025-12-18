@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.*;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -155,7 +156,7 @@ public class BlueMapBanners implements ModInitializer {
     private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
         final LiteralCommandNode<CommandSourceStack> baseCommand = dispatcher
                 .register(literal("bluemapbanners")
-                        .requires(source -> source.hasPermission(4))
+                        .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
                         .executes(context -> {
                             context.getSource().sendSuccess(() -> Component.translatable(
                                     "bluemapbanners.commands.status",
@@ -404,7 +405,7 @@ public class BlueMapBanners implements ModInitializer {
 
         dispatcher.register(literal("bb")
                 .redirect(baseCommand)
-                .requires(source -> source.hasPermission(4))
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
                 .executes(context -> {
                     context.getSource().sendSuccess(() -> Component.translatable(
                             "bluemapbanners.commands.status",
