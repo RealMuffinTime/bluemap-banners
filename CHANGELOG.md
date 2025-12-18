@@ -1,3 +1,7 @@
+## Version [v2.2.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.3) - 2025-12-18
+### Changes
+- Hotfix: use google gson instead of fasterxml jackson
+
 ## Version [v2.2.2](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.2) - 2025-12-18
 ### New Stuff
 - Add a config option to disable adding markers of unnamed banners (only applicable to instant placement)
