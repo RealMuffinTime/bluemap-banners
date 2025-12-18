@@ -1,10 +1,13 @@
 package dev.nincodedo.bluemapbanners;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.*;
 import java.util.stream.Stream;
 
@@ -30,14 +33,17 @@ public class Compatibility {
             files.filter(Files::isRegularFile)
                  .forEach(path -> {
                      try {
-                         ObjectMapper mapper = new ObjectMapper();
-                         File jsonFile = new File(path.toUri());
-                         ObjectNode root = (ObjectNode) mapper.readTree(jsonFile);
+                         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                         try (Reader reader = Files.newBufferedReader(path)) {
+                             JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
 
-                         if (root.get("label").asText().equals("bluemap-banners")) {
-                             root.put("label", "BlueMap Banners");
+                             if ("bluemap-banners".equals(root.get("label").getAsString())) {
+                                 root.addProperty("label", "BlueMap Banners");
 
-                             mapper.writer().writeValue(jsonFile, root);
+                                 try (Writer writer = Files.newBufferedWriter(path)) {
+                                     gson.toJson(root, writer);
+                                 }
+                             }
                          }
                      } catch (IOException ignored) {}
                  });
