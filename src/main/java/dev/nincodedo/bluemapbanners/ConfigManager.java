@@ -35,6 +35,7 @@ public class ConfigManager {
         defaultConfig.put("markerAddWithOriginalName", "false");
         defaultConfig.put("markerMaxViewDistance", "10000000");
         defaultConfig.put("bluemapUrl", "https://your-url-to-bluemap.com/");
+        defaultConfig.put("sendMetrics", "true");
 
         this.initialConfigFile();
         this.readConfigFile();

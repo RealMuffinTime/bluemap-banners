@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.SharedConstants;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -19,7 +20,6 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.server.*;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -40,6 +40,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static net.minecraft.commands.Commands.argument;
@@ -48,9 +51,11 @@ import static net.minecraft.commands.Commands.literal;
 public class BlueMapBanners implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("BlueMap Banners");
+    public static String VERSION = FabricLoader.getInstance().getModContainer("bluemap-banners").get().getMetadata().getVersion().getFriendlyString();;
     MarkerManager markerManager;
     MapIcons bannerMapIcons;
     ConfigManager configManager;
+    Timer daemonTimer;
 
     @Override
     public void onInitialize() {
@@ -79,6 +84,17 @@ public class BlueMapBanners implements ModInitializer {
         BlueMapAPI.onDisable(blueMapAPI -> LOGGER.info("Stopping BlueMap Banners"));
         UseBlockCallback.EVENT.register(this::useBlock);
         PlayerBlockBreakEvents.BEFORE.register(this::breakBlock);
+
+        daemonTimer = new Timer("BlueMap-Banners-Plugin-DaemonTimer", true);
+        TimerTask metricsTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (configManager.getBoolConfig("sendMetrics")) {
+                    Metrics.sendReport("fabric", VERSION, SharedConstants.getCurrentVersion().name());
+                }
+            }
+        };
+        daemonTimer.scheduleAtFixedRate(metricsTask, TimeUnit.MINUTES.toMillis(1), TimeUnit.MINUTES.toMillis(30));
     }
 
     private InteractionResult useBlock(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
