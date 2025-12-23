@@ -183,7 +183,8 @@ public class BlueMapBanners implements ModInitializer {
                                     configManager.getConfig("markerAddInstantOnBannerPlace"),
                                     configManager.getConfig("markerAddWithOriginalName"),
                                     configManager.getConfig("markerMaxViewDistance"),
-                                    configManager.getConfig("bluemapUrl")
+                                    configManager.getConfig("bluemapUrl"),
+                                    configManager.getConfig("sendMetrics")
                             ), false);
                             return 1;
                         })
@@ -417,6 +418,38 @@ public class BlueMapBanners implements ModInitializer {
                                             return 1;
                                         }))
                         )
+
+                        .then(literal("sendMetrics").executes(context -> {
+                                            context.getSource().sendSuccess(() -> Component.translatable(
+                                                    "bluemapbanners.commands.sendMetrics.status",
+                                                    configManager.getConfig("sendMetrics")
+                                            ), false);
+                                            return 1;
+                                        })
+                                        .then(literal("true").executes(context -> {
+                                            if (!configManager.getBoolConfig("sendMetrics")) {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.sendMetrics.true"), false);
+                                                configManager.setConfig("sendMetrics", true);
+                                            } else {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.sendMetrics.already_true"), false);
+                                            }
+                                            return 1;
+                                        }))
+
+                                        .then(literal("false").executes(context -> {
+                                            if (configManager.getBoolConfig("sendMetrics")) {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.sendMetrics.false"), false);
+                                                configManager.setConfig("sendMetrics", false);
+                                            } else {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.sendMetrics.already_false"), false);
+                                            }
+                                            return 1;
+                                        }))
+                        )
                 );
 
         dispatcher.register(literal("bb")
@@ -432,7 +465,8 @@ public class BlueMapBanners implements ModInitializer {
                             configManager.getConfig("markerAddInstantOnBannerPlace"),
                             configManager.getConfig("markerAddWithOriginalName"),
                             configManager.getConfig("markerMaxViewDistance"),
-                            configManager.getConfig("bluemapUrl")
+                            configManager.getConfig("bluemapUrl"),
+                            configManager.getConfig("sendMetrics")
                     ), false);
                     return 1;
                 })

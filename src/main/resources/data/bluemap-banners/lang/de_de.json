@@ -1,5 +1,5 @@
 {
-  "bluemapbanners.commands.status": "Aktuelle BlueMap Banners Einstellungen:\nnotifyPlayerOnBannerPlace: %s\nnotifyPlayerOnMarkerAdd: %s\nnotifyPlayerOnMarkerRemove: %s\nnotifyGlobalOnMarkerRemove: %s\nmarkerAddInstantOnBannerPlace: %s\nmarkerMaxViewDistance: %s\nbluemapUrl: %s",
+  "bluemapbanners.commands.status": "Aktuelle BlueMap Banners Einstellungen:\nnotifyPlayerOnBannerPlace: %s\nnotifyPlayerOnMarkerAdd: %s\nnotifyPlayerOnMarkerRemove: %s\nnotifyGlobalOnMarkerRemove: %s\nmarkerAddInstantOnBannerPlace: %s\nmarkerAddWithOriginalName: %s\nmarkerMaxViewDistance: %s\nbluemapUrl: %s\nsendMetrics: %s",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.status": "notifyPlayerOnBannerPlace: %s",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.true": "Spieler werden beim Platzieren eines Banners benachrichtigt.",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.already_true": "Spieler werden bereits beim Platzieren eines Banners benachrichtigt.",
@@ -34,6 +34,11 @@
   "bluemapbanners.commands.markerMaxViewDistance.update": "Die maximale Sichtweite für Marker wurde auf %s gesetzt.",
   "bluemapbanners.commands.bluemapUrl.status": "bluemapUrl: %s",
   "bluemapbanners.commands.bluemapUrl.update": "Die BlueMap-URL wurde auf %s gesetzt.",
+  "bluemapbanners.commands.sendMetrics.status": "sendMetrics: %s",
+  "bluemapbanners.commands.sendMetrics.true": "Metriken werden nun geteilt.",
+  "bluemapbanners.commands.sendMetrics.already_true": "Metriken werden bereits geteilt.",
+  "bluemapbanners.commands.sendMetrics.false": "Metriken werden nicht mehr geteilt.",
+  "bluemapbanners.commands.sendMetrics.already_false": "Metriken werden bereits nicht geteilt.",
   "bluemapbanners.notifyPlayerOnMarkerAdd": "Du hast der %s einen Marker hinzugefügt.",
   "bluemapbanners.notifyPlayerOnMarkerRemove": "Du hast einen Marker von der %s entfernt.",
   "bluemapbanners.notifyPlayerOnBannerPlace": "Benutze eine Karte auf dem Banner, um einen Marker auf der %s hinzuzufügen.",

@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 
 public class Metrics {
 
-    private static final String METRICS_REPORT_URL = "https://muffintime.tk/api/bluemap-banners/";
+    private static final String METRICS_REPORT_URL = "https://muffintime.tk/api/bluemap-banners";
     private static final Gson GSON = new GsonBuilder()
             .create();
 

@@ -63,6 +63,10 @@ markerMaxViewDistance=10000000
 
 # Your url on which players can click in notifications, to your BlueMap instance 
 bluemapUrl=https://your-url-to-bluemap.com/
+
+# Wheter this mod sends some usage metrics, a metric looks like: (fabric, 1.21.11, 2.2.3)
+# These metrics include which server implementation, Minecraft version and mod version you are using
+sendMetrics=true
 ```
 
 

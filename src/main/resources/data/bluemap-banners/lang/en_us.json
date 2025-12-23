@@ -1,5 +1,5 @@
 {
-  "bluemapbanners.commands.status": "Current BlueMap Banners settings:\nnotifyPlayerOnBannerPlace: %s\nnotifyPlayerOnMarkerAdd: %s\nnotifyPlayerOnMarkerRemove: %s\nnotifyGlobalOnMarkerRemove: %s\nmarkerAddInstantOnBannerPlace: %s\nmarkerMaxViewDistance: %s\nbluemapUrl: %s",
+  "bluemapbanners.commands.status": "Current BlueMap Banners settings:\nnotifyPlayerOnBannerPlace: %s\nnotifyPlayerOnMarkerAdd: %s\nnotifyPlayerOnMarkerRemove: %s\nnotifyGlobalOnMarkerRemove: %s\nmarkerAddInstantOnBannerPlace: %s\nmarkerAddWithOriginalName: %s\nmarkerMaxViewDistance: %s\nbluemapUrl: %s\nsendMetrics: %s",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.status": "notifyPlayerOnBannerPlace: %s",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.true": "Players are notified when placing a banner.",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.already_true": "Players are already being notified when placing a banner.",
@@ -34,6 +34,11 @@
   "bluemapbanners.commands.markerMaxViewDistance.update": "Marker max view distance has been set to %s.",
   "bluemapbanners.commands.bluemapUrl.status": "bluemapUrl: %s",
   "bluemapbanners.commands.bluemapUrl.update": "BlueMap url has been set to %s.",
+  "bluemapbanners.commands.sendMetrics.status": "sendMetrics: %s",
+  "bluemapbanners.commands.sendMetrics.true": "Metrics are now shared.",
+  "bluemapbanners.commands.sendMetrics.already_true": "Metrics are already shared.",
+  "bluemapbanners.commands.sendMetrics.false": "Metrics are no longer shared.",
+  "bluemapbanners.commands.sendMetrics.already_false": "Metrics are already not shared.",
   "bluemapbanners.notifyPlayerOnMarkerAdd": "You added a marker to the %s.",
   "bluemapbanners.notifyPlayerOnMarkerRemove": "You removed a marker from the %s.",
   "bluemapbanners.notifyPlayerOnBannerPlace": "Use a map item on the banner to add a marker on the %s.",
