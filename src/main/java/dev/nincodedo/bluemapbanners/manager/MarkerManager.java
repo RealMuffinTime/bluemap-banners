@@ -1,4 +1,4 @@
-package dev.nincodedo.bluemapbanners;
+package dev.nincodedo.bluemapbanners.manager;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -6,6 +6,7 @@ import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.gson.MarkerGson;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
+import dev.nincodedo.bluemapbanners.BlueMapBanners;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.phys.Vec3;

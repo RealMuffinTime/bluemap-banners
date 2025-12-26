@@ -1,4 +1,4 @@
-package dev.nincodedo.bluemapbanners;
+package dev.nincodedo.bluemapbanners.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

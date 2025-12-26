@@ -22,10 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package dev.nincodedo.bluemapbanners;
+package dev.nincodedo.bluemapbanners.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dev.nincodedo.bluemapbanners.BlueMapBanners;
 
 
 import javax.net.ssl.HttpsURLConnection;

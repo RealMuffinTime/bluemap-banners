@@ -1,8 +1,8 @@
 package dev.nincodedo.bluemapbanners.mixin;
 
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
-import dev.nincodedo.bluemapbanners.MarkerManager;
-import dev.nincodedo.bluemapbanners.ConfigManager;
+import dev.nincodedo.bluemapbanners.manager.MarkerManager;
+import dev.nincodedo.bluemapbanners.manager.ConfigManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;

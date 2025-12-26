@@ -1,7 +1,9 @@
-package dev.nincodedo.bluemapbanners;
+package dev.nincodedo.bluemapbanners.util;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import java.io.IOException;
+
+import dev.nincodedo.bluemapbanners.BlueMapBanners;
 import net.minecraft.world.item.DyeColor;
 
 public class MapIcons {

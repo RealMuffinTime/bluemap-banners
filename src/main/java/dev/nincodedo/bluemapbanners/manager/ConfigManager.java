@@ -4,8 +4,9 @@
  *  - RealMuffinTime
  */
 
-package dev.nincodedo.bluemapbanners;
+package dev.nincodedo.bluemapbanners.manager;
 
+import dev.nincodedo.bluemapbanners.BlueMapBanners;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.BufferedReader;

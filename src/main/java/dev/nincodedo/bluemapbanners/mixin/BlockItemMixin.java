@@ -1,8 +1,8 @@
 package dev.nincodedo.bluemapbanners.mixin;
 
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
-import dev.nincodedo.bluemapbanners.ConfigManager;
-import dev.nincodedo.bluemapbanners.MarkerManager;
+import dev.nincodedo.bluemapbanners.manager.ConfigManager;
+import dev.nincodedo.bluemapbanners.manager.MarkerManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
