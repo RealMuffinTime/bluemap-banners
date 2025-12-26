@@ -56,7 +56,7 @@ import static net.minecraft.commands.Commands.literal;
 public class BlueMapBanners implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("BlueMap Banners");
-    public static String VERSION = FabricLoader.getInstance().getModContainer("bluemap-banners").get().getMetadata().getVersion().getFriendlyString();;
+    public static String VERSION = FabricLoader.getInstance().getModContainer("bluemap-banners").get().getMetadata().getVersion().getFriendlyString();
     MarkerManager markerManager;
     MapIcons bannerMapIcons;
     ConfigManager configManager;
@@ -64,7 +64,7 @@ public class BlueMapBanners implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Starting BlueMap Banners");
+        LOGGER.info("Loading BlueMap Banners v{}", VERSION);
 
         String mapsConfigFolder = FabricLoader.getInstance().getConfigDir().resolve("bluemap-banners/maps").toString();
         new File(mapsConfigFolder).mkdirs();
