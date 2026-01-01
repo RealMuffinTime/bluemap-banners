@@ -3,11 +3,12 @@ package dev.nincodedo.bluemapbanners.manager;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
-import de.bluecolored.bluemap.api.gson.MarkerGson;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
-import net.fabricmc.loader.api.FabricLoader;
+import dev.nincodedo.bluemapbanners.storage.JdbcStorage;
+import dev.nincodedo.bluemapbanners.storage.JsonStorage;
+import dev.nincodedo.bluemapbanners.storage.Storage;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -16,16 +17,14 @@ import net.minecraft.world.level.block.WallBannerBlock;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.Objects;
 
 public class MarkerManager {
 
     private final String bannerMarkerSetId = "bluemap-banners";
     private static MarkerManager markerManager;
+    private Storage storage;
 
     public MarkerManager() {
         markerManager = this;
@@ -36,33 +35,19 @@ public class MarkerManager {
     }
 
     public void loadMarkerSets() {
+        switch (ConfigManager.getInstance().getConfig(Config.STORAGE_TYPE)) {
+            case "JDBC" -> storage = new JdbcStorage();
+            case "JSON" -> storage = new JsonStorage();
+            default -> {
+                storage = new JsonStorage();
+                BlueMapBanners.LOGGER.error("Invalid storage type specified: {}", ConfigManager.getInstance().getConfig(Config.STORAGE_TYPE));
+                BlueMapBanners.LOGGER.warn("Using default storage type: JSON");
+            }
+        };
+
         BlueMapAPI.getInstance().ifPresent(api -> {
             for (BlueMapWorld world : api.getWorlds()) {
-                // Not the nicest with the names
-                String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("bluemap-banners/maps/%s.json", worldToString(world))).toString();
-                try (FileReader reader = new FileReader(fileName)) {
-                    MarkerSet markerSet = MarkerGson.INSTANCE.fromJson(reader, MarkerSet.class);
-                    world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
-                } catch (FileNotFoundException ex) {
-                    MarkerSet markerSet = MarkerSet.builder().label("BlueMap Banners").defaultHidden(false).toggleable(true).build();
-                    world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, markerSet));
-                } catch (IOException ex) {
-                    BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
-                }
-            }
-        });
-    }
-
-    public void saveMarkerSet(BlueMapWorld world) {
-        String fileName = FabricLoader.getInstance().getConfigDir().resolve(String.format("bluemap-banners/maps/%s.json", worldToString(world))).toString();
-        BlueMapMap map = world.getMaps().iterator().next();
-        map.getMarkerSets().forEach((id, markerSet) -> {
-            if (id != null && id.equals(bannerMarkerSetId)) {
-                try (FileWriter writer = new FileWriter(fileName)) {
-                    MarkerGson.INSTANCE.toJson(markerSet, writer);
-                } catch (IOException ex) {
-                    BlueMapBanners.LOGGER.error(ex.getMessage(), ex);
-                }
+                world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, storage.getGeneratedMarkerSet(world.getId())));
             }
         });
     }
@@ -70,13 +55,7 @@ public class MarkerManager {
     public boolean doesMarkerExist(BannerBlockEntity bannerBlockEntity) {
         BlueMapAPI api = BlueMapAPI.getInstance().orElseThrow();
         BlueMapWorld world = api.getWorld(bannerBlockEntity.getLevel()).orElseThrow();
-        for (BlueMapMap map : world.getMaps()) {
-            MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
-            if (set.get(bannerBlockEntity.getBlockPos().toShortString()) != null) {
-                return true;
-            }
-        }
-        return false;
+        return storage.existsMarker(world.getId(), bannerBlockEntity.getBlockPos().toShortString());
     }
 
     public void removeMarker(BannerBlockEntity bannerBlockEntity) {
@@ -86,7 +65,7 @@ public class MarkerManager {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
             set.remove(bannerBlockEntity.getBlockPos().toShortString());
         }
-        saveMarkerSet(world);
+        storage.removeMarker(world.getId(), bannerBlockEntity.getBlockPos().toShortString());
     }
 
     public String getMarkerName(BlockState blockState, BannerBlockEntity bannerBlockEntity) {
@@ -108,16 +87,13 @@ public class MarkerManager {
         Vec3 offset = Vec3.ZERO;
         if (blockState.getBlock() instanceof WallBannerBlock) {
             Direction facing = blockState.getValue(WallBannerBlock.FACING);
-            switch (facing) {
-                case Direction.NORTH:
-                    offset.add(0, 0, -0.5);
-                case Direction.EAST:
-                    offset.add(0.5, 0, 0);
-                case Direction.SOUTH:
-                    offset.add(0, 0, 0.5);
-                case Direction.WEST:
-                    offset.add(-0.5, 0, 0);
-            }
+            offset = switch (facing) {
+                case Direction.NORTH -> offset.add(0, 0, 0.5);
+                case Direction.EAST -> offset.add(-0.5, 0, 0);
+                case Direction.SOUTH -> offset.add(0, 0, -0.5);
+                case Direction.WEST -> offset.add(0.5, 0, 0);
+                default -> offset;
+            };
         }
         return offset;
     }
@@ -127,23 +103,29 @@ public class MarkerManager {
         BlueMapWorld world = api.getWorld(bannerBlockEntity.getLevel()).orElseThrow();
 
         Vec3 offset = getMarkerOffset(blockState);
+        String text = getMarkerName(blockState, bannerBlockEntity);
+        Vec3 pos = bannerBlockEntity.getBlockPos().getCenter();
+        int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig(Config.MARKER_MAX_VIEW_DISTANCE);
 
         for (BlueMapMap map : world.getMaps()) {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
-            Vec3 pos = bannerBlockEntity.getBlockPos().getCenter();
             var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getBaseColor().name().toLowerCase() + ".png");
-            int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig(Config.MARKER_MAX_VIEW_DISTANCE);
+
+            pos = pos.add(
+                    offset.x,
+                    (Objects.equals(offset, Vec3.ZERO) ? -0.5 : 0.5),
+                    offset.z
+            );
+
             POIMarker bannerMarker = POIMarker.builder()
-                    .label(getMarkerName(blockState, bannerBlockEntity))
+                    .label(text)
+                    .detail(text)
                     .position(pos.x(), pos.y(), pos.z())
-                    .icon(iconAddress, 12, 32)
+                    .icon(iconAddress, 12, Objects.equals(offset, Vec3.ZERO) ? 32 : 0)
                     .maxDistance(markerMaxViewDistance).build();
             set.put(bannerBlockEntity.getBlockPos().toShortString(), bannerMarker);
         }
-        saveMarkerSet(world);
-    }
 
-    private String worldToString(BlueMapWorld world) {
-        return world.getId().replace("#minecraft:", "_").replace("_overworld", "");
+        storage.addMarker(world.getId(), bannerBlockEntity.getBlockPos().toShortString(), offset, player.getUUID(), "", bannerBlockEntity.getBaseColor().name().toLowerCase() + ".png", text);
     }
 }

@@ -9,7 +9,11 @@ public enum Config {
     MARKER_ADD_WITH_ORIGINAL_NAME("markerAddWithOriginalName", "false"),
     MARKER_MAX_VIEW_DISTANCE("markerMaxViewDistance", "10000000"),
     BLUEMAP_URL("bluemapUrl", "https://your-url-to-bluemap.com/"),
-    SEND_METRICS("sendMetrics", "true");
+    SEND_METRICS("sendMetrics", "true"),
+    STORAGE_TYPE("storageType", "JSON"),
+    STORAGE_JDBC_URL("storageJdbcUrl", "jdbc:mariadb://localhost:3306/bluemap-banners"),
+    STORAGE_JDBC_JAR("storageJdbcJar", "path/to/your/mariadb-java-client-3.0.7.jar"),
+    STORAGE_JDBC_ENTRY("storageJdbcEntry", "org.mariadb.jdbc.Driver");
 
     private final String key;
     private final String defaultValue;
