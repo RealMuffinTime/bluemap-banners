@@ -8,9 +8,11 @@ import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.WallBannerBlock;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -102,9 +104,30 @@ public class MarkerManager {
         return name;
     }
 
+    public Vec3 getMarkerOffset(BlockState blockState) {
+        Vec3 offset = Vec3.ZERO;
+        if (blockState.getBlock() instanceof WallBannerBlock) {
+            Direction facing = blockState.getValue(WallBannerBlock.FACING);
+            switch (facing) {
+                case Direction.NORTH:
+                    offset.add(0, 0, -0.5);
+                case Direction.EAST:
+                    offset.add(0.5, 0, 0);
+                case Direction.SOUTH:
+                    offset.add(0, 0, 0.5);
+                case Direction.WEST:
+                    offset.add(-0.5, 0, 0);
+            }
+        }
+        return offset;
+    }
+
     public void addMarker(BlockState blockState, BannerBlockEntity bannerBlockEntity, Player player) {
         BlueMapAPI api = BlueMapAPI.getInstance().orElseThrow();
         BlueMapWorld world = api.getWorld(bannerBlockEntity.getLevel()).orElseThrow();
+
+        Vec3 offset = getMarkerOffset(blockState);
+
         for (BlueMapMap map : world.getMaps()) {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
             Vec3 pos = bannerBlockEntity.getBlockPos().getCenter();
