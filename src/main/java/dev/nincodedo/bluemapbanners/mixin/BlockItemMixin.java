@@ -34,7 +34,7 @@ public class BlockItemMixin {
                 BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
                 if (bannerBlockEntity != null && !markerManager.doesMarkerExist(bannerBlockEntity)) {
                     if (bannerBlockEntity.getCustomName() != null || configManager.getBoolConfig("markerAddWithOriginalName")) {
-                        BlueMapBanners.addMarkerWithName(state, bannerBlockEntity, markerManager);
+                        markerManager.addMarker(state, bannerBlockEntity, player);
                         if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd") && player != null)
                             player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()), false);
                     }

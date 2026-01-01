@@ -114,7 +114,7 @@ public class BlueMapBanners implements ModInitializer {
             if (blockState != null && blockState.is(BlockTags.BANNERS) && bannerBlockEntity != null) {
                 try {
                     if (!markerManager.doesMarkerExist(bannerBlockEntity)) {
-                        addMarkerWithName(blockState, bannerBlockEntity, markerManager);
+                        markerManager.addMarker(blockState, bannerBlockEntity, player);
                         if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerAdd"))
                             player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", getWebText()), false);
                     } else {
@@ -126,21 +126,6 @@ public class BlueMapBanners implements ModInitializer {
             }
         }
         return InteractionResult.PASS;
-    }
-
-    public static void addMarkerWithName(BlockState blockState, BannerBlockEntity bannerBlockEntity, MarkerManager markerManager) {
-        String name;
-        if (bannerBlockEntity.getCustomName() != null) {
-            name = bannerBlockEntity.getCustomName().getString();
-        } else {
-            if (bannerBlockEntity.components().keySet().contains(DataComponents.ITEM_NAME))
-                name = Objects.requireNonNull(bannerBlockEntity.components().get(DataComponents.ITEM_NAME)).getString();
-            else {
-                String blockTranslationKey = blockState.getBlock().getDescriptionId();
-                name = Component.translatable(blockTranslationKey).getString();
-            }
-        }
-        markerManager.addMarker(bannerBlockEntity, name);
     }
 
     public static Component getWebText() {

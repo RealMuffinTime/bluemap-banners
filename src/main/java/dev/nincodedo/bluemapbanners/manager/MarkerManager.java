@@ -8,12 +8,17 @@ import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MarkerManager {
 
@@ -82,7 +87,22 @@ public class MarkerManager {
         saveMarkerSet(world);
     }
 
-    public void addMarker(BannerBlockEntity bannerBlockEntity, String blockName) {
+    public String getMarkerName(BlockState blockState, BannerBlockEntity bannerBlockEntity) {
+        String name;
+        if (bannerBlockEntity.getCustomName() != null) {
+            name = bannerBlockEntity.getCustomName().getString();
+        } else {
+            if (bannerBlockEntity.components().keySet().contains(DataComponents.ITEM_NAME))
+                name = Objects.requireNonNull(bannerBlockEntity.components().get(DataComponents.ITEM_NAME)).getString();
+            else {
+                String blockTranslationKey = blockState.getBlock().getDescriptionId();
+                name = Component.translatable(blockTranslationKey).getString();
+            }
+        }
+        return name;
+    }
+
+    public void addMarker(BlockState blockState, BannerBlockEntity bannerBlockEntity, Player player) {
         BlueMapAPI api = BlueMapAPI.getInstance().orElseThrow();
         BlueMapWorld world = api.getWorld(bannerBlockEntity.getLevel()).orElseThrow();
         for (BlueMapMap map : world.getMaps()) {
@@ -90,7 +110,11 @@ public class MarkerManager {
             Vec3 pos = bannerBlockEntity.getBlockPos().getCenter();
             var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getBaseColor().name().toLowerCase() + ".png");
             int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig("markerMaxViewDistance");
-            POIMarker bannerMarker = POIMarker.builder().label(blockName).position(pos.x(), pos.y(), pos.z()).icon(iconAddress, 12, 32).maxDistance(markerMaxViewDistance).build();
+            POIMarker bannerMarker = POIMarker.builder()
+                    .label(getMarkerName(blockState, bannerBlockEntity))
+                    .position(pos.x(), pos.y(), pos.z())
+                    .icon(iconAddress, 12, 32)
+                    .maxDistance(markerMaxViewDistance).build();
             set.put(bannerBlockEntity.getBlockPos().toShortString(), bannerMarker);
         }
         saveMarkerSet(world);
