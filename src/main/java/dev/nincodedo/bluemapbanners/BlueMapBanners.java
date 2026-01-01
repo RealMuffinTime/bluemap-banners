@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.bluecolored.bluemap.api.BlueMapAPI;
+import dev.nincodedo.bluemapbanners.manager.Config;
 import dev.nincodedo.bluemapbanners.manager.ConfigManager;
 import dev.nincodedo.bluemapbanners.manager.MarkerManager;
 import dev.nincodedo.bluemapbanners.util.Compatibility;
@@ -20,7 +21,6 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -94,7 +94,7 @@ public class BlueMapBanners implements ModInitializer {
         TimerTask metricsTask = new TimerTask() {
             @Override
             public void run() {
-                if (configManager.getBoolConfig("sendMetrics")) {
+                if (configManager.getBoolConfig(Config.SEND_METRICS)) {
                     Metrics.sendReport("fabric", VERSION, SharedConstants.getCurrentVersion().name());
                 }
             }
@@ -105,7 +105,7 @@ public class BlueMapBanners implements ModInitializer {
     private InteractionResult useBlock(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
         if (player.isSpectator() ||
                 (player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) ||
-                ConfigManager.getInstance().getBoolConfig("markerAddInstantOnBannerPlace")) {
+                ConfigManager.getInstance().getBoolConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE)) {
             return InteractionResult.PASS;
         }
         if (player.getMainHandItem().is(Items.MAP) || player.getOffhandItem().is(Items.MAP) || player.getMainHandItem().is(Items.FILLED_MAP) || player.getOffhandItem().is(Items.FILLED_MAP)) {
@@ -115,11 +115,11 @@ public class BlueMapBanners implements ModInitializer {
                 try {
                     if (!markerManager.doesMarkerExist(bannerBlockEntity)) {
                         markerManager.addMarker(blockState, bannerBlockEntity, player);
-                        if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerAdd"))
+                        if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD))
                             player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", getWebText()), false);
                     } else {
                         markerManager.removeMarker(bannerBlockEntity);
-                        if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove"))
+                        if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE))
                             player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", getWebText()), false);
                     }
                 } catch (NoSuchElementException ignored) {}
@@ -130,7 +130,7 @@ public class BlueMapBanners implements ModInitializer {
 
     public static Component getWebText() {
         URI uri;
-        String bluemapUrl = ConfigManager.getInstance().getConfig("bluemapUrl");
+        String bluemapUrl = ConfigManager.getInstance().getConfig(Config.BLUEMAP_URL);
         String invalidUrl = "https://invalid-url-in-config.com/";
         try {
             // Minecraft only works with an http or https scheme
@@ -151,7 +151,7 @@ public class BlueMapBanners implements ModInitializer {
             try {
                 if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
-                    if (ConfigManager.getInstance().getBoolConfig("notifyPlayerOnMarkerRemove"))
+                    if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE))
                         playerEntity.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", BlueMapBanners.getWebText()), false);
                 }
             } catch (NoSuchElementException ignored) {}
@@ -166,31 +166,31 @@ public class BlueMapBanners implements ModInitializer {
                         .executes(context -> {
                             context.getSource().sendSuccess(() -> Component.translatable(
                                     "bluemapbanners.commands.status",
-                                    configManager.getConfig("notifyPlayerOnBannerPlace"),
-                                    configManager.getConfig("notifyPlayerOnMarkerAdd"),
-                                    configManager.getConfig("notifyPlayerOnMarkerRemove"),
-                                    configManager.getConfig("notifyGlobalOnMarkerRemove"),
-                                    configManager.getConfig("markerAddInstantOnBannerPlace"),
-                                    configManager.getConfig("markerAddWithOriginalName"),
-                                    configManager.getConfig("markerMaxViewDistance"),
-                                    configManager.getConfig("bluemapUrl"),
-                                    configManager.getConfig("sendMetrics")
+                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE),
+                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD),
+                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE),
+                                    configManager.getConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE),
+                                    configManager.getConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE),
+                                    configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME),
+                                    configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE),
+                                    configManager.getConfig(Config.BLUEMAP_URL),
+                                    configManager.getConfig(Config.SEND_METRICS)
                             ), false);
                             return 1;
                         })
 
-                        .then(literal("notifyPlayerOnBannerPlace").executes(context -> {
+                        .then(literal(Config.NOTIFY_PLAYER_ON_BANNER_PLACE.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.notifyPlayerOnBannerPlace.status",
-                                                    configManager.getConfig("notifyPlayerOnBannerPlace")
+                                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("notifyPlayerOnBannerPlace")) {
+                                            if (!configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnBannerPlace.true"), false);
-                                                configManager.setConfig("notifyPlayerOnBannerPlace", true);
+                                                configManager.setConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnBannerPlace.already_true"), false);
@@ -199,10 +199,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("notifyPlayerOnBannerPlace")) {
+                                            if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnBannerPlace.false"), false);
-                                                configManager.setConfig("notifyPlayerOnBannerPlace", false);
+                                                configManager.setConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnBannerPlace.already_false"), false);
@@ -211,18 +211,18 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
-                        .then(literal("notifyPlayerOnMarkerAdd").executes(context -> {
+                        .then(literal(Config.NOTIFY_PLAYER_ON_MARKER_ADD.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.notifyPlayerOnMarkerAdd.status",
-                                                    configManager.getConfig("notifyPlayerOnMarkerAdd")
+                                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("notifyPlayerOnMarkerAdd")) {
+                                            if (!configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerAdd.true"), false);
-                                                configManager.setConfig("notifyPlayerOnMarkerAdd", true);
+                                                configManager.setConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerAdd.already_true"), false);
@@ -231,10 +231,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd")) {
+                                            if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerAdd.false"), false);
-                                                configManager.setConfig("notifyPlayerOnMarkerAdd", false);
+                                                configManager.setConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerAdd.already_false"), false);
@@ -243,18 +243,18 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
-                        .then(literal("notifyPlayerOnMarkerRemove").executes(context -> {
+                        .then(literal(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.notifyPlayerOnMarkerRemove.status",
-                                                    configManager.getConfig("notifyPlayerOnMarkerRemove")
+                                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("notifyPlayerOnMarkerRemove")) {
+                                            if (!configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerRemove.true"), false);
-                                                configManager.setConfig("notifyPlayerOnMarkerRemove", true);
+                                                configManager.setConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerRemove.already_true"), false);
@@ -263,10 +263,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("notifyPlayerOnMarkerRemove")) {
+                                            if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerRemove.false"), false);
-                                                configManager.setConfig("notifyPlayerOnMarkerRemove", false);
+                                                configManager.setConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyPlayerOnMarkerRemove.already_false"), false);
@@ -275,18 +275,18 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
-                        .then(literal("notifyGlobalOnMarkerRemove").executes(context -> {
+                        .then(literal(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.notifyGlobalOnMarkerRemove.status",
-                                                    configManager.getConfig("notifyGlobalOnMarkerRemove")
+                                                    configManager.getConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("notifyGlobalOnMarkerRemove")) {
+                                            if (!configManager.getBoolConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyGlobalOnMarkerRemove.true"), false);
-                                                configManager.setConfig("notifyGlobalOnMarkerRemove", true);
+                                                configManager.setConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyGlobalOnMarkerRemove.already_true"), false);
@@ -295,10 +295,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("notifyGlobalOnMarkerRemove")) {
+                                            if (configManager.getBoolConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyGlobalOnMarkerRemove.false"), false);
-                                                configManager.setConfig("notifyGlobalOnMarkerRemove", false);
+                                                configManager.setConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.notifyGlobalOnMarkerRemove.already_false"), false);
@@ -307,18 +307,18 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
-                        .then(literal("markerAddInstantOnBannerPlace").executes(context -> {
+                        .then(literal(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.markerAddInstantOnBannerPlace.status",
-                                                    configManager.getConfig("markerAddInstantOnBannerPlace")
+                                                    configManager.getConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("markerAddInstantOnBannerPlace")) {
+                                            if (!configManager.getBoolConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddInstantOnBannerPlace.true"), false);
-                                                configManager.setConfig("markerAddInstantOnBannerPlace", true);
+                                                configManager.setConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddInstantOnBannerPlace.already_true"), false);
@@ -327,10 +327,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("markerAddInstantOnBannerPlace")) {
+                                            if (configManager.getBoolConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddInstantOnBannerPlace.false"), false);
-                                                configManager.setConfig("markerAddInstantOnBannerPlace", false);
+                                                configManager.setConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddInstantOnBannerPlace.already_false"), false);
@@ -339,18 +339,18 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
                         
-                        .then(literal("markerAddWithOriginalName").executes(context -> {
+                        .then(literal(Config.MARKER_ADD_WITH_ORIGINAL_NAME.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.markerAddWithOriginalName.status",
-                                                    configManager.getConfig("markerAddWithOriginalName")
+                                                    configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("markerAddWithOriginalName")) {
+                                            if (!configManager.getBoolConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddWithOriginalName.true"), false);
-                                                configManager.setConfig("markerAddWithOriginalName", true);
+                                                configManager.setConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddWithOriginalName.already_true"), false);
@@ -359,10 +359,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("markerAddWithOriginalName")) {
+                                            if (configManager.getBoolConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddWithOriginalName.false"), false);
-                                                configManager.setConfig("markerAddWithOriginalName", false);
+                                                configManager.setConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerAddWithOriginalName.already_false"), false);
@@ -371,56 +371,56 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
-                        .then(literal("markerMaxViewDistance").executes(context -> {
+                        .then(literal(Config.MARKER_MAX_VIEW_DISTANCE.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.markerMaxViewDistance.status",
-                                                    configManager.getConfig("markerMaxViewDistance")
+                                                    configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE)
                                             ), false);
                                             return 1;
                                         })
 
-                                        .then(argument("markerMaxViewDistance", greedyString()) .executes(context -> {
-                                            configManager.setConfig("markerMaxViewDistance", Integer.parseInt(StringArgumentType.getString(context, "markerMaxViewDistance")));
+                                        .then(argument(Config.MARKER_MAX_VIEW_DISTANCE.getKey(), greedyString()) .executes(context -> {
+                                            configManager.setConfig(Config.MARKER_MAX_VIEW_DISTANCE, Integer.parseInt(StringArgumentType.getString(context, Config.MARKER_MAX_VIEW_DISTANCE.getKey())));
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.markerMaxViewDistance.update",
-                                                    configManager.getConfig("markerMaxViewDistance")
+                                                    configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE)
                                             ), false);
 
                                             return 1;
                                         }))
                         )
 
-                        .then(literal("bluemapUrl").executes(context -> {
+                        .then(literal(Config.BLUEMAP_URL.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.bluemapUrl.status",
-                                                    configManager.getConfig("bluemapUrl")
+                                                    configManager.getConfig(Config.BLUEMAP_URL)
                                             ), false);
                                             return 1;
                                         })
 
-                                        .then(argument("bluemapUrl", greedyString()) .executes(context -> {
-                                            configManager.setConfig("bluemapUrl", StringArgumentType.getString(context, "bluemapUrl"));
+                                        .then(argument(Config.BLUEMAP_URL.getKey(), greedyString()) .executes(context -> {
+                                            configManager.setConfig(Config.BLUEMAP_URL, StringArgumentType.getString(context, Config.BLUEMAP_URL.getKey()));
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.bluemapUrl.update",
-                                                    configManager.getConfig("bluemapUrl")
+                                                    configManager.getConfig(Config.BLUEMAP_URL)
                                             ), false);
 
                                             return 1;
                                         }))
                         )
 
-                        .then(literal("sendMetrics").executes(context -> {
+                        .then(literal(Config.SEND_METRICS.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.sendMetrics.status",
-                                                    configManager.getConfig("sendMetrics")
+                                                    configManager.getConfig(Config.SEND_METRICS)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig("sendMetrics")) {
+                                            if (!configManager.getBoolConfig(Config.SEND_METRICS)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.sendMetrics.true"), false);
-                                                configManager.setConfig("sendMetrics", true);
+                                                configManager.setConfig(Config.SEND_METRICS, true);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.sendMetrics.already_true"), false);
@@ -429,10 +429,10 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig("sendMetrics")) {
+                                            if (configManager.getBoolConfig(Config.SEND_METRICS)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.sendMetrics.false"), false);
-                                                configManager.setConfig("sendMetrics", false);
+                                                configManager.setConfig(Config.SEND_METRICS, false);
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.sendMetrics.already_false"), false);
@@ -448,15 +448,15 @@ public class BlueMapBanners implements ModInitializer {
                 .executes(context -> {
                     context.getSource().sendSuccess(() -> Component.translatable(
                             "bluemapbanners.commands.status",
-                            configManager.getConfig("notifyPlayerOnBannerPlace"),
-                            configManager.getConfig("notifyPlayerOnMarkerAdd"),
-                            configManager.getConfig("notifyPlayerOnMarkerRemove"),
-                            configManager.getConfig("notifyGlobalOnMarkerRemove"),
-                            configManager.getConfig("markerAddInstantOnBannerPlace"),
-                            configManager.getConfig("markerAddWithOriginalName"),
-                            configManager.getConfig("markerMaxViewDistance"),
-                            configManager.getConfig("bluemapUrl"),
-                            configManager.getConfig("sendMetrics")
+                            configManager.getConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE),
+                            configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD),
+                            configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE),
+                            configManager.getConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE),
+                            configManager.getConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE),
+                            configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME),
+                            configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE),
+                            configManager.getConfig(Config.BLUEMAP_URL),
+                            configManager.getConfig(Config.SEND_METRICS)
                     ), false);
                     return 1;
                 })

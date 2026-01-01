@@ -19,24 +19,12 @@ import java.nio.file.Files;
 import java.util.Hashtable;
 
 public class ConfigManager {
-    private final Hashtable<String, String> config = new Hashtable<>();
-    private final Hashtable<String, String> defaultConfig = new Hashtable<>();
+    private final Hashtable<Config, String> config = new Hashtable<>();
     private final String configFilePath;
     private static ConfigManager configManager;
 
     public ConfigManager() {
         this.configFilePath = FabricLoader.getInstance().getConfigDir().resolve("bluemap-banners/bluemap-banners.properties").toString();
-
-        // Initialize the hashtable with default values
-        defaultConfig.put("notifyPlayerOnBannerPlace", "true");
-        defaultConfig.put("notifyPlayerOnMarkerAdd", "true");
-        defaultConfig.put("notifyPlayerOnMarkerRemove", "true");
-        defaultConfig.put("notifyGlobalOnMarkerRemove", "false");
-        defaultConfig.put("markerAddInstantOnBannerPlace", "false");
-        defaultConfig.put("markerAddWithOriginalName", "false");
-        defaultConfig.put("markerMaxViewDistance", "10000000");
-        defaultConfig.put("bluemapUrl", "https://your-url-to-bluemap.com/");
-        defaultConfig.put("sendMetrics", "true");
 
         this.initialConfigFile();
         this.readConfigFile();
@@ -58,9 +46,9 @@ public class ConfigManager {
                 String[] entry = line.split("=");
                 try {
                     // Try adding the entry into the hashmap
-                    this.config.put(entry[0].trim(), entry[1].trim());
+                    this.config.put(Config.fromKey(entry[0].trim()), entry[1].trim());
                 }
-                catch (IndexOutOfBoundsException oobe) {
+                catch (IndexOutOfBoundsException | IllegalArgumentException exception) {
                     BlueMapBanners.LOGGER.error("Invalid config line: {}", line);
                 }
             }
@@ -76,28 +64,32 @@ public class ConfigManager {
             String line;
             StringBuilder stringBuilder = new StringBuilder();
             BufferedReader fileIn = new BufferedReader(new FileReader(this.configFilePath));
-            Hashtable<String, String> configsFound = new Hashtable<>();
+            Hashtable<Config, String> configsFound = new Hashtable<>();
             while ((line = fileIn.readLine()) != null) {
                 String key = line.split("=")[0].trim();
                 if (line.startsWith("#") || line.isEmpty()) {
                     stringBuilder.append(line).append("\n");
-                } else if (this.defaultConfig.containsKey(key)) {
-                    configsFound.put(key, "");
-                    if (force) {
-                        stringBuilder.append(key).append("=").append(this.config.get(key)).append("\n");
-                    } else {
-                        stringBuilder.append(line).append("\n");
-                    }
                 } else {
-                    stringBuilder.append("#").append(line).append("\n");
+                    try {
+                        Config config = Config.fromKey(key);
+                        configsFound.put(config, "");
+                        if (force) {
+                            stringBuilder.append(config.getKey()).append("=").append(this.config.get(config)).append("\n");
+                        } else {
+                            stringBuilder.append(line).append("\n");
+                        }
+                    } catch (IllegalArgumentException e) {
+                        BlueMapBanners.LOGGER.error("Invalid config line: {}", line);
+                        stringBuilder.append("#").append(line).append("\n");
+                    }
                 }
             }
             fileIn.close();
 
             // add missing config lines
-            for (String key : this.defaultConfig.keySet()) {
-                if (!configsFound.containsKey(key)) {
-                    stringBuilder.append(key).append("=").append(this.defaultConfig.get(key)).append("\n");
+            for (Config config : Config.values()) {
+                if (!configsFound.containsKey(config)) {
+                    stringBuilder.append(config.getKey()).append("=").append(config.getDefaultValue()).append("\n");
                 }
             }
 
@@ -118,7 +110,8 @@ public class ConfigManager {
         } catch (IOException e) {
             BlueMapBanners.LOGGER.error("IOException while creating config directory: {}", e.getMessage());
         }
-        // Create standard configuration if the file does not exist
+
+        // Create a standard configuration if the file does not exist
         File file = new File(this.configFilePath);
         if (!file.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.configFilePath))) {
@@ -130,8 +123,8 @@ public class ConfigManager {
 
                 string.append("\n\n\n");
 
-                for (String key : defaultConfig.keySet()) {
-                    string.append(key).append("=").append(defaultConfig.get(key)).append("\n");
+                for (Config config : Config.values()) {
+                    string.append(config.getKey()).append("=").append(config.getDefaultValue()).append("\n");
                 }
 
                 writer.write(string.toString(), 0, string.length());
@@ -141,37 +134,37 @@ public class ConfigManager {
         }
     }
 
-    public String getConfig(String name) {
-        if (this.config.get(name) == null) {
-            if (this.defaultConfig.get(name) == null) {
-                throw new IllegalArgumentException("Config name " + name + " not found.");
-            }
-            return this.defaultConfig.get(name);
-        } else {
-            return this.config.get(name);
+    public String getConfig(Config config) {
+        if (this.config.get(config) == null)
+            return config.getDefaultValue();
+        return this.config.get(config);
+    }
+
+    public Boolean getBoolConfig(Config config) {
+        return Boolean.parseBoolean(getConfig(config));
+    }
+
+    public int getIntConfig(Config config) {
+        try {
+            return Integer.parseInt(getConfig(config));
+        } catch (NumberFormatException e) {
+            BlueMapBanners.LOGGER.warn("Invalid config value for {}: {}", config.getKey(), getConfig(config));
+            return Integer.parseInt(config.getDefaultValue());
         }
     }
 
-    public Boolean getBoolConfig(String name) {
-        return Boolean.parseBoolean(getConfig(name));
-    }
-
-    public int getIntConfig(String name) {
-        return Integer.parseInt(getConfig(name));
-    }
-
-    public void setConfig(String name, String value) {
-        this.config.put(name, value);
+    public void setConfig(Config config, String value) {
+        this.config.put(config, value);
         updateConfigFile(true);
     }
 
-    public void setConfig(String name, boolean value) {
-        this.config.put(name, String.valueOf(value));
+    public void setConfig(Config config, boolean value) {
+        this.config.put(config, String.valueOf(value));
         updateConfigFile(true);
     }
 
-    public void setConfig(String name, int value) {
-        this.config.put(name, String.valueOf(value));
+    public void setConfig(Config config, int value) {
+        this.config.put(config, String.valueOf(value));
         updateConfigFile(true);
     }
 }

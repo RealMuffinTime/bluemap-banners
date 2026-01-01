@@ -1,6 +1,7 @@
 package dev.nincodedo.bluemapbanners.mixin;
 
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
+import dev.nincodedo.bluemapbanners.manager.Config;
 import dev.nincodedo.bluemapbanners.manager.ConfigManager;
 import dev.nincodedo.bluemapbanners.manager.MarkerManager;
 import net.minecraft.core.BlockPos;
@@ -33,7 +34,7 @@ public class BlockBehaviourMixin {
             try {
                 if (markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
-                    if (ConfigManager.getInstance().getBoolConfig("notifyGlobalOnMarkerRemove"))
+                    if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE))
                         Objects.requireNonNull(serverLevel.getServer()).getPlayerList().broadcastSystemMessage(Component.translatable("bluemapbanners.notifyGlobalOnMarkerRemove", BlueMapBanners.getWebText()), false);
                 }
             } catch (NoSuchElementException ignored) {}

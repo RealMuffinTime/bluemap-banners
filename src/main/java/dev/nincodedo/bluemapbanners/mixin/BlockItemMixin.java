@@ -1,6 +1,7 @@
 package dev.nincodedo.bluemapbanners.mixin;
 
 import dev.nincodedo.bluemapbanners.BlueMapBanners;
+import dev.nincodedo.bluemapbanners.manager.Config;
 import dev.nincodedo.bluemapbanners.manager.ConfigManager;
 import dev.nincodedo.bluemapbanners.manager.MarkerManager;
 import net.minecraft.core.BlockPos;
@@ -30,17 +31,17 @@ public class BlockItemMixin {
         if (state.is(BlockTags.BANNERS)) {
             MarkerManager markerManager = MarkerManager.getInstance();
             ConfigManager configManager = ConfigManager.getInstance();
-            if (configManager.getBoolConfig("markerAddInstantOnBannerPlace")) {
+            if (configManager.getBoolConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE)) {
                 BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(pos);
                 if (bannerBlockEntity != null && !markerManager.doesMarkerExist(bannerBlockEntity)) {
-                    if (bannerBlockEntity.getCustomName() != null || configManager.getBoolConfig("markerAddWithOriginalName")) {
+                    if (bannerBlockEntity.getCustomName() != null || configManager.getBoolConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME)) {
                         markerManager.addMarker(state, bannerBlockEntity, player);
-                        if (configManager.getBoolConfig("notifyPlayerOnMarkerAdd") && player != null)
+                        if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD) && player != null)
                             player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()), false);
                     }
                 }
             } else {
-                if (configManager.getBoolConfig("notifyPlayerOnBannerPlace") && player != null)
+                if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE) && player != null)
                     player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnBannerPlace", BlueMapBanners.getWebText()), false);
             }
         }

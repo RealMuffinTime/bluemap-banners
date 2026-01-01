@@ -132,7 +132,7 @@ public class MarkerManager {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
             Vec3 pos = bannerBlockEntity.getBlockPos().getCenter();
             var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getBaseColor().name().toLowerCase() + ".png");
-            int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig("markerMaxViewDistance");
+            int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig(Config.MARKER_MAX_VIEW_DISTANCE);
             POIMarker bannerMarker = POIMarker.builder()
                     .label(getMarkerName(blockState, bannerBlockEntity))
                     .position(pos.x(), pos.y(), pos.z())
