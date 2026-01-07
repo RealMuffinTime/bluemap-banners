@@ -56,13 +56,14 @@ import static net.minecraft.commands.Commands.literal;
 public class BlueMapBanners implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("BlueMap Banners");
-    public static String VERSION = FabricLoader.getInstance().getModContainer("bluemap-banners").get().getMetadata().getVersion().getFriendlyString();
+    public static String VERSION = FabricLoader.getInstance().getModContainer("bluemap-banners").orElseThrow().getMetadata().getVersion().getFriendlyString();
     MarkerManager markerManager;
     MapIcons bannerMapIcons;
     ConfigManager configManager;
     Timer daemonTimer;
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void onInitialize() {
         LOGGER.info("Loading BlueMap Banners v{}", VERSION);
 
@@ -102,6 +103,7 @@ public class BlueMapBanners implements ModInitializer {
         daemonTimer.scheduleAtFixedRate(metricsTask, TimeUnit.MINUTES.toMillis(1), TimeUnit.MINUTES.toMillis(30));
     }
 
+    @SuppressWarnings("SameReturnValue")
     private InteractionResult useBlock(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
         if (player.isSpectator() ||
                 (player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) ||
@@ -110,8 +112,11 @@ public class BlueMapBanners implements ModInitializer {
         }
         if (player.getMainHandItem().is(Items.MAP) || player.getOffhandItem().is(Items.MAP) || player.getMainHandItem().is(Items.FILLED_MAP) || player.getOffhandItem().is(Items.FILLED_MAP)) {
             BlockState blockState = world.getBlockState(hitResult.getBlockPos());
-            BannerBlockEntity bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(hitResult.getBlockPos());
-            if (blockState != null && blockState.is(BlockTags.BANNERS) && bannerBlockEntity != null) {
+            BannerBlockEntity bannerBlockEntity = null;
+            try {
+                bannerBlockEntity = (BannerBlockEntity) world.getBlockEntity(hitResult.getBlockPos());
+            } catch (ClassCastException ignored) {}
+            if (blockState.is(BlockTags.BANNERS) && bannerBlockEntity != null) {
                 try {
                     if (!markerManager.doesMarkerExist(bannerBlockEntity)) {
                         markerManager.addMarker(blockState, bannerBlockEntity, player);
