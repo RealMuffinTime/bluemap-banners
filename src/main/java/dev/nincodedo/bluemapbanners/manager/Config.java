@@ -12,6 +12,8 @@ public enum Config {
     SEND_METRICS("sendMetrics", "true"),
     STORAGE_TYPE("storageType", "JSON"),
     STORAGE_JDBC_URL("storageJdbcUrl", "jdbc:mariadb://localhost:3306/bluemap-banners"),
+    STORAGE_JDBC_USER("storageJdbcUser", "root"),
+    STORAGE_JDBC_PASSWORD("storageJdbcPassword", "root"),
     STORAGE_JDBC_JAR("storageJdbcJar", "path/to/your/mariadb-java-client-3.0.7.jar"),
     STORAGE_JDBC_ENTRY("storageJdbcEntry", "org.mariadb.jdbc.Driver");
 
