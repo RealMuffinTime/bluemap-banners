@@ -48,9 +48,7 @@ public class ConfigManager {
                     // Try adding the entry into the hashmap
                     this.config.put(Config.fromKey(entry[0].trim()), entry[1].trim());
                 }
-                catch (IndexOutOfBoundsException | IllegalArgumentException exception) {
-                    BlueMapBanners.LOGGER.error("Invalid config line: {}", line);
-                }
+                catch (IndexOutOfBoundsException | IllegalArgumentException ignored) {}
             }
         }
         catch (IOException ioe) {
