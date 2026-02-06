@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
@@ -63,14 +62,9 @@ public class BlueMapBanners implements ModInitializer {
     Timer daemonTimer;
 
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void onInitialize() {
         LOGGER.info("Loading BlueMap Banners v{}", VERSION);
 
-        String mapsConfigFolder = FabricLoader.getInstance().getConfigDir().resolve("bluemap-banners/maps").toString();
-        new File(mapsConfigFolder).mkdirs();
-
-        Compatibility.init(mapsConfigFolder);
         markerManager = new MarkerManager();
         bannerMapIcons = new MapIcons();
         configManager = new ConfigManager();
@@ -84,6 +78,7 @@ public class BlueMapBanners implements ModInitializer {
             BlueMapAPI.onEnable(blueMapAPI -> {
                 LOGGER.info("Integrating BlueMap Banners into BlueMap");
                 markerManager.loadMarkerSets();
+                Compatibility.init(server);
                 bannerMapIcons.loadMapIcons(blueMapAPI);
             });
         });
