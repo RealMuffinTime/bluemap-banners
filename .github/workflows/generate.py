@@ -25,3 +25,8 @@ with open("gradle.properties", "r") as inFile:
         if line.startswith("minecraft_version="):
             githubFile.write(f"\nFor Minecraft Version `{line[18:].strip()}`.")
             envFile.write(f"\nMINECRAFT_VERSION={line[18:].strip()}")
+
+with open("build.gradle", "r") as inFile:
+    for line in inFile.readlines():
+        if line.startswith("    sourceCompatibility"):
+            envFile.write(f"\nJAVA_VERSION={line.split("_")[1].strip()}")
