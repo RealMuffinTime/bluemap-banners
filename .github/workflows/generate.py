@@ -29,4 +29,4 @@ with open("gradle.properties", "r") as inFile:
 with open("build.gradle", "r") as inFile:
     for line in inFile.readlines():
         if line.startswith("    sourceCompatibility"):
-            envFile.write(f"\nJAVA_VERSION={line.split("_")[1].strip()}")
+            envFile.write(f"\nJAVA_VERSION={line.split('_')[1].strip()}")
