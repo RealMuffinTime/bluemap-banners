@@ -116,11 +116,11 @@ public class BlueMapBanners implements ModInitializer {
                     if (!markerManager.doesMarkerExist(bannerBlockEntity)) {
                         markerManager.addMarker(blockState, bannerBlockEntity, player);
                         if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD))
-                            player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", getWebText()), false);
+                            player.sendSystemMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", getWebText()));
                     } else {
                         markerManager.removeMarker(bannerBlockEntity);
                         if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE))
-                            player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", getWebText()), false);
+                            player.sendSystemMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", getWebText()));
                     }
                 } catch (NoSuchElementException ignored) {}
             }
@@ -152,7 +152,7 @@ public class BlueMapBanners implements ModInitializer {
                 if (bannerBlockEntity != null && markerManager.doesMarkerExist(bannerBlockEntity)) {
                     markerManager.removeMarker(bannerBlockEntity);
                     if (ConfigManager.getInstance().getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE))
-                        playerEntity.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", BlueMapBanners.getWebText()), false);
+                        playerEntity.sendSystemMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerRemove", BlueMapBanners.getWebText()));
                 }
             } catch (NoSuchElementException ignored) {}
         }

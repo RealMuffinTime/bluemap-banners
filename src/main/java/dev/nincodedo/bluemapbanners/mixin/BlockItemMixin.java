@@ -37,12 +37,12 @@ public class BlockItemMixin {
                     if (bannerBlockEntity.getCustomName() != null || configManager.getBoolConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME)) {
                         markerManager.addMarker(state, bannerBlockEntity, player);
                         if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD) && player != null)
-                            player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()), false);
+                            player.sendSystemMessage(Component.translatable("bluemapbanners.notifyPlayerOnMarkerAdd", BlueMapBanners.getWebText()));
                     }
                 }
             } else {
                 if (configManager.getBoolConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE) && player != null)
-                    player.displayClientMessage(Component.translatable("bluemapbanners.notifyPlayerOnBannerPlace", BlueMapBanners.getWebText()), false);
+                    player.sendSystemMessage(Component.translatable("bluemapbanners.notifyPlayerOnBannerPlace", BlueMapBanners.getWebText()));
             }
         }
     }
