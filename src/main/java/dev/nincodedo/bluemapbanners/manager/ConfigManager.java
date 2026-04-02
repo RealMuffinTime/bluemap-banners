@@ -104,7 +104,7 @@ public class ConfigManager {
     public void initialConfigFile() {
         // Create the config folder if not exist
         try {
-            Files.createDirectories(FabricLoader.getInstance().getConfigDir());
+            Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve("bluemap-banners"));
         } catch (IOException e) {
             BlueMapBanners.LOGGER.error("IOException while creating config directory: {}", e.getMessage());
         }
