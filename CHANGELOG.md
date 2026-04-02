@@ -1,3 +1,7 @@
+## Version [v3.0.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.0.1) - 2026-04-02
+### Changes
+- Update to Minecraft `26.1.1`
+
 ## Version [v3.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.0.0) - 2026-04-02
 ### New Stuff
 - Banner data storage gets overwhelmed
