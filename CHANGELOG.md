@@ -1,6 +1,27 @@
+## Version [v3.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.0.0) - 2026-04-02
+### New Stuff
+- Banner data storage gets overwhelmed
+  - Player placing the banner is now saved
+  - Timestamp when placing the banner is now saved
+  - Banners are now shown on their placement origin, like in the Minecraft world
+  - Choose between JSON storage (default) or JDBC (MaSQL, MariaDB, SQLite) storage
+  - Old banner saves are transferred to the new storage format  
+    Old marker sets are kept in `maps-imported`, but no longer used
+  - Preparing for a future release (dynamic/custom detail text generation, max banner per player limit and detailed banner image)
+- On startup print version information in the console
+- Simple metric collection is added (collects the version of Minecraft and the version of the mod), equal to BlueMap metrics, can be disabled in the config
+
+### Changes
+- Update to Minecraft `26.1`
+- Releases are continued if one type of release fails
+- A little bit of restructuring classes and code
+- Fix compatibility with the Fast Item Frames mod
+- Faulty config lines are no longer printed twice in the console
+- Update GitHub actions workflow, merge build and release workflows
+
 ## Version [v2.2.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.3) - 2025-12-18
 ### Changes
-- Hotfix: use google gson instead of fasterxml jackson
+- Hotfix: use Google gson instead of fasterxml jackson
 
 ## Version [v2.2.2](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.2) - 2025-12-18
 ### New Stuff
@@ -14,7 +35,7 @@
 ## Version [v2.2.1](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.1) - 2025-10-08
 ### Changes
 - Update to Minecraft `1.21.10`
-- Add commands overview to README.md
+- Add a command overview to README.md
 
 ## Version [v2.2.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.2.0) - 2025-10-02
 ### New Stuff
@@ -28,7 +49,7 @@
 - Improve README.md and add images
 - Fix global notifier using a wrong config identifier
 - Fix wrong world reference [#9](https://github.com/RealMuffinTime/bluemap-banners/issues/9)
-- Fix GitHub actions artifact not uploading
+- Fix GitHub actions artifact is not uploading
 
 ## Version [v2.1.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.3) - 2025-07-20
 ### Changes
@@ -71,7 +92,7 @@
 ## Version [v2.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.0.0) - 2025-05-26
 ### New Stuff
 - Support for multiple dimensions, closes [#2](https://github.com/Nincodedo/Banners4BM/issues/2)
-- Non player block break is now recognised, closes [#3](https://github.com/Nincodedo/Banners4BM/issues/3)
+- Non-player block break is now recognized, closes [#3](https://github.com/Nincodedo/Banners4BM/issues/3)
 - Added structured config files
 - Added player notifications (configurable in a config file)
   - When a player places a banner (to provide information how to add banners on the map)
@@ -83,7 +104,7 @@
 - Add CHANGELOG.md
 ### Changes
 - Don't differentiate between filled and non-filled map items
-- Use standard config folder
+- Use the standard config folder
 - Improve README.md
 - Change branding to `BlueMap Banners`
 - Revert back to old versioning
