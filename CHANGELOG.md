@@ -1,8 +1,8 @@
 ## Version [v3.0.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.0.0) - 2026-04-02
 ### New Stuff
 - Banner data storage gets overwhelmed
-  - Player placing the banner is now saved
-  - Timestamp when placing the banner is now saved
+  - Player adding the banner is now saved
+  - Timestamp when adding the banner is now saved
   - Banners are now shown on their placement origin, like in the Minecraft world
   - Choose between JSON storage (default) or JDBC (MaSQL, MariaDB, SQLite) storage
   - Old banner saves are transferred to the new storage format  
@@ -10,7 +10,6 @@
   - Preparing for a future release (dynamic/custom detail text generation, max banner per player limit and detailed banner image)
 - On startup print version information in the console
 - Simple metric collection is added (collects the version of Minecraft and the version of the mod), equal to BlueMap metrics, can be disabled in the config
-
 ### Changes
 - Update to Minecraft `26.1`
 - Releases are continued if one type of release fails
