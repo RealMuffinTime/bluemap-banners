@@ -104,7 +104,7 @@ public class MarkerManager {
 
         Vec3 offset = getMarkerOffset(blockState);
         String text = getMarkerName(blockState, bannerBlockEntity);
-        Vec3 pos = bannerBlockEntity.getBlockPos().getCenter();
+        Vec3 pos = Vec3.atCenterOf(bannerBlockEntity.getBlockPos());
         int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig(Config.MARKER_MAX_VIEW_DISTANCE);
 
         for (BlueMapMap map : world.getMaps()) {
