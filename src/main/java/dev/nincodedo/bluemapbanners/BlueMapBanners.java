@@ -409,6 +409,38 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
+                        .then(literal(Config.HIDE_MARKER_BY_DEFAULT.getKey()).executes(context -> {
+                                            context.getSource().sendSuccess(() -> Component.translatable(
+                                                    "bluemapbanners.commands.hideMarkerByDefault.status",
+                                                    configManager.getConfig(Config.HIDE_MARKER_BY_DEFAULT)
+                                            ), false);
+                                            return 1;
+                                        })
+                                        .then(literal("true").executes(context -> {
+                                            if (!configManager.getBoolConfig(Config.HIDE_MARKER_BY_DEFAULT)) {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.hideMarkerByDefault.true"), false);
+                                                configManager.setConfig(Config.HIDE_MARKER_BY_DEFAULT, true);
+                                            } else {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.hideMarkerByDefault.already_true"), false);
+                                            }
+                                            return 1;
+                                        }))
+
+                                        .then(literal("false").executes(context -> {
+                                            if (configManager.getBoolConfig(Config.HIDE_MARKER_BY_DEFAULT)) {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.hideMarkerByDefault.false"), false);
+                                                configManager.setConfig(Config.HIDE_MARKER_BY_DEFAULT, false);
+                                            } else {
+                                                context.getSource().sendSuccess(() -> Component.translatable(
+                                                        "bluemapbanners.commands.hideMarkerByDefault.already_false"), false);
+                                            }
+                                            return 1;
+                                        }))
+                        )
+
                         .then(literal(Config.SEND_METRICS.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.sendMetrics.status",

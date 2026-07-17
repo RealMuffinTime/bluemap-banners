@@ -106,9 +106,11 @@ public class MarkerManager {
         String text = getMarkerName(blockState, bannerBlockEntity);
         Vec3 pos = Vec3.atCenterOf(bannerBlockEntity.getBlockPos());
         int markerMaxViewDistance = ConfigManager.getInstance().getIntConfig(Config.MARKER_MAX_VIEW_DISTANCE);
+        boolean hideMarkerByDefault = ConfigManager.getInstance().getBoolConfig(Config.HIDE_MARKER_BY_DEFAULT);
 
         for (BlueMapMap map : world.getMaps()) {
             MarkerSet set = map.getMarkerSets().get(bannerMarkerSetId);
+            set.setDefaultHidden(hideMarkerByDefault);
             var iconAddress = map.getAssetStorage().getAssetUrl(bannerBlockEntity.getBaseColor().name().toLowerCase() + ".png");
 
             pos = pos.add(
@@ -116,6 +118,7 @@ public class MarkerManager {
                     (Objects.equals(offset, Vec3.ZERO) ? -0.5 : 0.5),
                     offset.z
             );
+
 
             POIMarker bannerMarker = POIMarker.builder()
                     .label(text)
