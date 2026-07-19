@@ -34,7 +34,8 @@ The main command is `/bluemapbanners`, but there is also the alias `/bb` you can
 /bluemapbanners notifyGlobalOnMarkerRemove [true|false]
 /bluemapbanners markerAddInstantOnBannerPlace [true|false]
 /bluemapbanners markerAddWithOriginalName [true|false]
-/bluemapbanners markerMaxViewDistance [<number>] 
+/bluemapbanners markerMaxViewDistance [<number>]
+/bluemapbanners markerSetHideByDefault [true|false]
 /bluemapbanners bluemapUrl [<url>]
 ```
 
@@ -63,6 +64,10 @@ markerMaxViewDistance=10000000
 
 # Your url on which players can click in notifications, to your BlueMap instance 
 bluemapUrl=https://your-url-to-bluemap.com/
+
+# Wheter the marker set should be hidden by default when accessing BlueMap
+# You may need to clear browser cookies and relaod the page to apply this effect
+markerSetHideByDefault=false
 
 # Wheter this mod sends some usage metrics, a metric looks like: (fabric, 1.21.11, 2.2.3)
 # These metrics include which server implementation, Minecraft version and mod version you are using
