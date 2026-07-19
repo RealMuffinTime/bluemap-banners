@@ -43,13 +43,26 @@ public class MarkerManager {
                 BlueMapBanners.LOGGER.error("Invalid storage type specified: {}", ConfigManager.getInstance().getConfig(Config.STORAGE_TYPE));
                 BlueMapBanners.LOGGER.warn("Using default storage type: JSON");
             }
-        };
+        }
 
-        BlueMapAPI.getInstance().ifPresent(api -> {
-            for (BlueMapWorld world : api.getWorlds()) {
+        BlueMapAPI.getInstance().ifPresent(blueMapAPI -> {
+            for (BlueMapWorld world : blueMapAPI.getWorlds()) {
                 world.getMaps().forEach(map -> map.getMarkerSets().put(bannerMarkerSetId, storage.getGeneratedMarkerSet(world.getId())));
             }
         });
+    }
+
+    public void unloadMarkerSets() {
+        BlueMapAPI.getInstance().ifPresent(blueMapAPI -> {
+            for (BlueMapWorld world : blueMapAPI.getWorlds()) {
+                world.getMaps().forEach(blueMapMap -> blueMapMap.getMarkerSets().remove(bannerMarkerSetId));
+            }
+        });
+    }
+
+    public void reloadMarkerSets() {
+        unloadMarkerSets();
+        loadMarkerSets();
     }
 
     public boolean doesMarkerExist(BannerBlockEntity bannerBlockEntity) {

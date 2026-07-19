@@ -140,7 +140,7 @@ public class JsonStorage implements Storage {
             addWorld(world);
         }
 
-        MarkerSet set = new MarkerSet("BlueMap Banners");
+        MarkerSet set = getBaseMarkerSet();
 
         for (String pos : data.worlds.get(world).keySet()) {
             Map<String, Object> banner = data.worlds.get(world).get(pos);

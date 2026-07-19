@@ -8,6 +8,7 @@ public enum Config {
     MARKER_ADD_INSTANT_ON_BANNER_PLACE("markerAddInstantOnBannerPlace", "false"),
     MARKER_ADD_WITH_ORIGINAL_NAME("markerAddWithOriginalName", "false"),
     MARKER_MAX_VIEW_DISTANCE("markerMaxViewDistance", "10000000"),
+    MARKER_SET_HIDE_BY_DEFAULT("markerSetHideByDefault", "false"),
     BLUEMAP_URL("bluemapUrl", "https://your-url-to-bluemap.com/"),
     SEND_METRICS("sendMetrics", "true"),
     STORAGE_TYPE("storageType", "JSON"),

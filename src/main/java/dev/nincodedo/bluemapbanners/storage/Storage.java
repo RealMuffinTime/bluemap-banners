@@ -1,6 +1,8 @@
 package dev.nincodedo.bluemapbanners.storage;
 
 import de.bluecolored.bluemap.api.markers.MarkerSet;
+import dev.nincodedo.bluemapbanners.manager.Config;
+import dev.nincodedo.bluemapbanners.manager.ConfigManager;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
@@ -28,4 +30,13 @@ public interface Storage {
     int getMarkerCountByPlayerByWorld(UUID player, String world);
 
     MarkerSet getGeneratedMarkerSet(String world);
+
+    default MarkerSet getBaseMarkerSet() {
+        MarkerSet set = new MarkerSet("BlueMap Banners");
+
+        if (ConfigManager.getInstance().getBoolConfig(Config.MARKER_SET_HIDE_BY_DEFAULT))
+            set.setDefaultHidden(true);
+
+        return set;
+    }
 }
