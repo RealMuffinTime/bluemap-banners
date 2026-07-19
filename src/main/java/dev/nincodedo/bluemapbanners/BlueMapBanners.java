@@ -83,7 +83,7 @@ public class BlueMapBanners implements ModInitializer {
                 bannerMapIcons.loadMapIcons(blueMapAPI);
             });
         });
-        BlueMapAPI.onDisable(blueMapAPI -> LOGGER.info("Stopping BlueMap Banners"));
+        BlueMapAPI.onDisable(_ -> LOGGER.info("Stopping BlueMap Banners"));
         UseBlockCallback.EVENT.register(this::useBlock);
         PlayerBlockBreakEvents.BEFORE.register(this::breakBlock);
 
@@ -171,6 +171,7 @@ public class BlueMapBanners implements ModInitializer {
                 configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME),
                 configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE),
                 configManager.getConfig(Config.MARKER_SET_HIDE_BY_DEFAULT),
+                configManager.getConfig(Config.MARKER_SET_NAME),
                 configManager.getConfig(Config.BLUEMAP_URL),
                 configManager.getConfig(Config.SEND_METRICS)
         ), false);
@@ -443,6 +444,25 @@ public class BlueMapBanners implements ModInitializer {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
                                                         "bluemapbanners.commands.markerSetHideByDefault.already_false"), false);
                                             }
+                                            return 1;
+                                        }))
+                        )
+
+                        .then(literal(Config.MARKER_SET_NAME.getKey()).executes(context -> {
+                                            context.getSource().sendSuccess(() -> Component.translatable(
+                                                    "bluemapbanners.commands.markerSetName.status",
+                                                    configManager.getConfig(Config.MARKER_SET_NAME)
+                                            ), false);
+                                            return 1;
+                                        })
+
+                                        .then(argument(Config.MARKER_SET_NAME.getKey(), greedyString()) .executes(context -> {
+                                            configManager.setConfig(Config.MARKER_SET_NAME, StringArgumentType.getString(context, Config.MARKER_SET_NAME.getKey()));
+                                            context.getSource().sendSuccess(() -> Component.translatable(
+                                                    "bluemapbanners.commands.markerSetName.update",
+                                                    configManager.getConfig(Config.MARKER_SET_NAME)
+                                            ), false);
+                                            markerManager.reloadMarkerSets();
                                             return 1;
                                         }))
                         )

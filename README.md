@@ -36,6 +36,7 @@ The main command is `/bluemapbanners`, but there is also the alias `/bb` you can
 /bluemapbanners markerAddWithOriginalName [true|false]
 /bluemapbanners markerMaxViewDistance [<number>]
 /bluemapbanners markerSetHideByDefault [true|false]
+/bluemapbanners markerSetName [<name>]
 /bluemapbanners bluemapUrl [<url>]
 ```
 
@@ -66,8 +67,12 @@ markerMaxViewDistance=10000000
 bluemapUrl=https://your-url-to-bluemap.com/
 
 # Wheter the marker set should be hidden by default when accessing BlueMap
-# You may need to clear browser cookies and relaod the page to apply this effect
+# You may need to clear browser cookies and reload the page to apply this setting
 markerSetHideByDefault=false
+
+# The name of the marker set used in BlueMap
+# You may need to reload the page to apply this setting
+markerSetName=BlueMap Banners
 
 # Wheter this mod sends some usage metrics, a metric looks like: (fabric, 1.21.11, 2.2.3)
 # These metrics include which server implementation, Minecraft version and mod version you are using

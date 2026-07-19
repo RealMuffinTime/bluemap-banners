@@ -32,7 +32,7 @@ public interface Storage {
     MarkerSet getGeneratedMarkerSet(String world);
 
     default MarkerSet getBaseMarkerSet() {
-        MarkerSet set = new MarkerSet("BlueMap Banners");
+        MarkerSet set = new MarkerSet(ConfigManager.getInstance().getConfig(Config.MARKER_SET_NAME));
 
         if (ConfigManager.getInstance().getBoolConfig(Config.MARKER_SET_HIDE_BY_DEFAULT))
             set.setDefaultHidden(true);

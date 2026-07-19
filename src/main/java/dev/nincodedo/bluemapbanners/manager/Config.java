@@ -9,6 +9,7 @@ public enum Config {
     MARKER_ADD_WITH_ORIGINAL_NAME("markerAddWithOriginalName", "false"),
     MARKER_MAX_VIEW_DISTANCE("markerMaxViewDistance", "10000000"),
     MARKER_SET_HIDE_BY_DEFAULT("markerSetHideByDefault", "false"),
+    MARKER_SET_NAME("markerSetName", "BlueMap Banners"),
     BLUEMAP_URL("bluemapUrl", "https://your-url-to-bluemap.com/"),
     SEND_METRICS("sendMetrics", "true"),
     STORAGE_TYPE("storageType", "JSON"),

@@ -1,5 +1,5 @@
 {
-  "bluemapbanners.commands.status": "Current BlueMap Banners settings:\nnotifyPlayerOnBannerPlace: %s\nnotifyPlayerOnMarkerAdd: %s\nnotifyPlayerOnMarkerRemove: %s\nnotifyGlobalOnMarkerRemove: %s\nmarkerAddInstantOnBannerPlace: %s\nmarkerAddWithOriginalName: %s\nmarkerMaxViewDistance: %s\nmarkerSetHideByDefault: %s\nbluemapUrl: %s\nsendMetrics: %s",
+  "bluemapbanners.commands.status": "Current BlueMap Banners settings:\nnotifyPlayerOnBannerPlace: %s\nnotifyPlayerOnMarkerAdd: %s\nnotifyPlayerOnMarkerRemove: %s\nnotifyGlobalOnMarkerRemove: %s\nmarkerAddInstantOnBannerPlace: %s\nmarkerAddWithOriginalName: %s\nmarkerMaxViewDistance: %s\nmarkerSetHideByDefault: %s\nmarkerSetName: %s\nbluemapUrl: %s\nsendMetrics: %s",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.status": "notifyPlayerOnBannerPlace: %s",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.true": "Players are notified when placing a banner.",
   "bluemapbanners.commands.notifyPlayerOnBannerPlace.already_true": "Players are already being notified when placing a banner.",
@@ -39,6 +39,8 @@
   "bluemapbanners.commands.markerSetHideByDefault.already_true": "Markers are already hidden by default.",
   "bluemapbanners.commands.markerSetHideByDefault.false": "Markers are now shown by default.",
   "bluemapbanners.commands.markerSetHideByDefault.already_false": "Makers are already shown by default.",
+  "bluemapbanners.commands.markerSetName.status": "markerSetName: %s",
+  "bluemapbanners.commands.markerSetName.update": "Marker set name has been set to %s.",
   "bluemapbanners.commands.sendMetrics.status": "sendMetrics: %s",
   "bluemapbanners.commands.sendMetrics.true": "Metrics are now shared.",
   "bluemapbanners.commands.sendMetrics.already_true": "Metrics are already shared.",
