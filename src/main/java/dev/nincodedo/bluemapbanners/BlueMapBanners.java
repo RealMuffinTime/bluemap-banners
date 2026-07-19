@@ -2,6 +2,7 @@ package dev.nincodedo.bluemapbanners;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import dev.nincodedo.bluemapbanners.manager.Config;
@@ -159,25 +160,28 @@ public class BlueMapBanners implements ModInitializer {
         return true;
     }
 
+    private int baseCommandResponse(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(() -> Component.translatable(
+                "bluemapbanners.commands.status",
+                configManager.getConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE),
+                configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD),
+                configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE),
+                configManager.getConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE),
+                configManager.getConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE),
+                configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME),
+                configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE),
+                configManager.getConfig(Config.MARKER_SET_HIDE_BY_DEFAULT),
+                configManager.getConfig(Config.BLUEMAP_URL),
+                configManager.getConfig(Config.SEND_METRICS)
+        ), false);
+        return 1;
+    }
+
     private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
         final LiteralCommandNode<CommandSourceStack> baseCommand = dispatcher
                 .register(literal("bluemapbanners")
                         .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
-                        .executes(context -> {
-                            context.getSource().sendSuccess(() -> Component.translatable(
-                                    "bluemapbanners.commands.status",
-                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE),
-                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD),
-                                    configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE),
-                                    configManager.getConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE),
-                                    configManager.getConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE),
-                                    configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME),
-                                    configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE),
-                                    configManager.getConfig(Config.BLUEMAP_URL),
-                                    configManager.getConfig(Config.SEND_METRICS)
-                            ), false);
-                            return 1;
-                        })
+                        .executes(this::baseCommandResponse)
 
                         .then(literal(Config.NOTIFY_PLAYER_ON_BANNER_PLACE.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
@@ -409,33 +413,35 @@ public class BlueMapBanners implements ModInitializer {
                                         }))
                         )
 
-                        .then(literal(Config.HIDE_MARKER_BY_DEFAULT.getKey()).executes(context -> {
+                        .then(literal(Config.MARKER_SET_HIDE_BY_DEFAULT.getKey()).executes(context -> {
                                             context.getSource().sendSuccess(() -> Component.translatable(
                                                     "bluemapbanners.commands.hideMarkerByDefault.status",
-                                                    configManager.getConfig(Config.HIDE_MARKER_BY_DEFAULT)
+                                                    configManager.getConfig(Config.MARKER_SET_HIDE_BY_DEFAULT)
                                             ), false);
                                             return 1;
                                         })
                                         .then(literal("true").executes(context -> {
-                                            if (!configManager.getBoolConfig(Config.HIDE_MARKER_BY_DEFAULT)) {
+                                            if (!configManager.getBoolConfig(Config.MARKER_SET_HIDE_BY_DEFAULT)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
-                                                        "bluemapbanners.commands.hideMarkerByDefault.true"), false);
-                                                configManager.setConfig(Config.HIDE_MARKER_BY_DEFAULT, true);
+                                                        "bluemapbanners.commands.markerSetHideByDefault.true"), false);
+                                                configManager.setConfig(Config.MARKER_SET_HIDE_BY_DEFAULT, true);
+                                                markerManager.reloadMarkerSets();
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
-                                                        "bluemapbanners.commands.hideMarkerByDefault.already_true"), false);
+                                                        "bluemapbanners.commands.markerSetHideByDefault.already_true"), false);
                                             }
                                             return 1;
                                         }))
 
                                         .then(literal("false").executes(context -> {
-                                            if (configManager.getBoolConfig(Config.HIDE_MARKER_BY_DEFAULT)) {
+                                            if (configManager.getBoolConfig(Config.MARKER_SET_HIDE_BY_DEFAULT)) {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
-                                                        "bluemapbanners.commands.hideMarkerByDefault.false"), false);
-                                                configManager.setConfig(Config.HIDE_MARKER_BY_DEFAULT, false);
+                                                        "bluemapbanners.commands.markerSetHideByDefault.false"), false);
+                                                configManager.setConfig(Config.MARKER_SET_HIDE_BY_DEFAULT, false);
+                                                markerManager.reloadMarkerSets();
                                             } else {
                                                 context.getSource().sendSuccess(() -> Component.translatable(
-                                                        "bluemapbanners.commands.hideMarkerByDefault.already_false"), false);
+                                                        "bluemapbanners.commands.markerSetHideByDefault.already_false"), false);
                                             }
                                             return 1;
                                         }))
@@ -477,21 +483,7 @@ public class BlueMapBanners implements ModInitializer {
         dispatcher.register(literal("bb")
                 .redirect(baseCommand)
                 .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
-                .executes(context -> {
-                    context.getSource().sendSuccess(() -> Component.translatable(
-                            "bluemapbanners.commands.status",
-                            configManager.getConfig(Config.NOTIFY_PLAYER_ON_BANNER_PLACE),
-                            configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_ADD),
-                            configManager.getConfig(Config.NOTIFY_PLAYER_ON_MARKER_REMOVE),
-                            configManager.getConfig(Config.NOTIFY_GLOBAL_ON_MARKER_REMOVE),
-                            configManager.getConfig(Config.MARKER_ADD_INSTANT_ON_BANNER_PLACE),
-                            configManager.getConfig(Config.MARKER_ADD_WITH_ORIGINAL_NAME),
-                            configManager.getConfig(Config.MARKER_MAX_VIEW_DISTANCE),
-                            configManager.getConfig(Config.BLUEMAP_URL),
-                            configManager.getConfig(Config.SEND_METRICS)
-                    ), false);
-                    return 1;
-                })
+                .executes(this::baseCommandResponse)
         );
     }
 }

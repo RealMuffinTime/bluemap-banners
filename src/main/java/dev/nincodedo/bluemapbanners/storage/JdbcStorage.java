@@ -337,7 +337,7 @@ public class JdbcStorage implements Storage {
 
     @Override
     public MarkerSet getGeneratedMarkerSet(String world) {
-        MarkerSet set = new MarkerSet("BlueMap Banners");
+        MarkerSet set = getBaseMarkerSet();
 
         try (var statement = connection.prepareStatement("SELECT * FROM bluemap_banners_markers WHERE world = ?")) {
             statement.setString(1, world);
