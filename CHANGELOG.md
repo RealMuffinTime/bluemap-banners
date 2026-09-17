@@ -1,3 +1,13 @@
+## Version [v3.1.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.1.0) - 2025-09-17
+### New Stuff
+- Allow renaming the marker set name shown in BlueMap GUI [#12](https://github.com/RealMuffinTime/bluemap-banners/issues/12)
+- Allow to set the marker set as hidden by default in BlueMap GUI by @PadBro in [#13](https://github.com/RealMuffinTime/bluemap-banners/pull/13)
+### Changes
+- Update to Minecraft `26.3` by @Traynack in [#15](https://github.com/RealMuffinTime/bluemap-banners/pull/15)
+### New Contributors
+- @PadBro made their first contribution in [#13](https://github.com/RealMuffinTime/bluemap-banners/pull/13)
+- @Traynack made their first contribution in [#15](https://github.com/RealMuffinTime/bluemap-banners/pull/15)
+
 ## Version [v3.0.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.0.3) - 2026-06-21
 ### Changes
 - Update to Minecraft `26.2`
@@ -60,6 +70,8 @@
 - Improve README.md and add images
 - Fix global notifier using a wrong config identifier
 - Fix wrong world reference [#9](https://github.com/RealMuffinTime/bluemap-banners/issues/9)
+- Fix not applying ominous banner name [#8](https://github.com/RealMuffinTime/bluemap-banners/issues/8)
+- Fix custom name not being saved when using markerAddInstantOnBannerPlace [#7](https://github.com/RealMuffinTime/bluemap-banners/issues/7)
 - Fix GitHub actions artifact is not uploading
 
 ## Version [v2.1.3](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v2.1.3) - 2025-07-20
