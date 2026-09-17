@@ -25,7 +25,7 @@ import java.util.function.BiConsumer;
 @Mixin(BlockBehaviour.class)
 public class BlockBehaviourMixin {
     @Inject(method = "onExplosionHit",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
     private void destroyBlockInject(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Explosion explosion, BiConsumer<ItemStack, BlockPos> biConsumer, CallbackInfo ci) {
         if (blockState.is(BlockTags.BANNERS)) {
             MarkerManager markerManager = MarkerManager.getInstance();
