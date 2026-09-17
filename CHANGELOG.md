@@ -1,4 +1,4 @@
-## Version [v3.1.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.1.0) - 2025-09-17
+## Version [v3.1.0](https://github.com/RealMuffinTime/bluemap-banners/releases/tag/v3.1.0) - 2026-09-17
 ### New Stuff
 - Allow renaming the marker set name shown in BlueMap GUI [#12](https://github.com/RealMuffinTime/bluemap-banners/issues/12)
 - Allow to set the marker set as hidden by default in BlueMap GUI by @PadBro in [#13](https://github.com/RealMuffinTime/bluemap-banners/pull/13)
